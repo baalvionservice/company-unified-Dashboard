@@ -89,7 +89,7 @@ const navItems = [
   { href: '/equity', icon: FileText, label: 'Equity' },
   { href: '/analytics/businesses', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
-  { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
+  { href: '/analytics/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
