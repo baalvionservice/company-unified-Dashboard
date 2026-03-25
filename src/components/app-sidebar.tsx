@@ -100,6 +100,7 @@ const navItems = [
   { href: '/analytics/domains', icon: Globe, label: 'Domains' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
+  { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
 ];
 
 export function AppSidebar() {

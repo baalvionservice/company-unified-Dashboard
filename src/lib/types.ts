@@ -157,3 +157,18 @@ export interface Task {
         timestamp: string;
     }[];
 }
+
+export interface ComplianceRecord {
+  countryId: string;
+  country: string;
+  business: string;
+  flag: string;
+  taxStatus: string;
+  taxStatusCode: 'ok' | 'warning';
+  vatGst: string;
+  licenses: string;
+  dataLaws: string;
+  employmentLaw: string;
+  overallScore: number;
+  actionItems: string[];
+}
