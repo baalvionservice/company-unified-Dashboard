@@ -12,6 +12,7 @@ import {
   FileText,
   Globe,
   Home,
+  LayoutDashboard,
   LogOut,
   Map,
   RefreshCw,
@@ -70,6 +71,7 @@ const BaalvionLogo = () => (
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
+  { href: '/operations', icon: LayoutDashboard, label: 'Daily Ops' },
   { href: '/kpis', icon: Target, label: 'KPIs' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/financials/global', icon: Banknote, label: 'Financials' },
