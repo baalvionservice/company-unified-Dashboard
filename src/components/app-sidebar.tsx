@@ -33,6 +33,7 @@ import {
   TrendingUp,
   BookLock,
   ShieldAlert,
+  Scaling,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -104,6 +105,7 @@ const navItems = [
   { href: '/analytics/domains', icon: Globe, label: 'Domains' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/ai', icon: Cpu, label: 'AI Intelligence' },
+  { href: '/ai/simulator', icon: Scaling, label: 'Century Simulator' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
   { href: '/compliance/gdpr', icon: BookLock, label: 'GDPR' },
