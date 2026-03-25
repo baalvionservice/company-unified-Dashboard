@@ -93,3 +93,28 @@ export interface ServerCost {
   cost: number;
   services: string;
 }
+
+export interface Stakeholder {
+  name: string;
+  role: string;
+  equity: number;
+  usdValue: number;
+  vestingStatus: string;
+  notes: string;
+}
+
+export interface EquityHistoryEvent {
+  id: string;
+  date: string;
+  event: string;
+  stakeholder: string;
+  change: string;
+  newTotal: string;
+}
+
+export interface EquityData {
+  businessId: string;
+  valuation: number;
+  stakeholders: Stakeholder[];
+  equityHistory: EquityHistoryEvent[];
+}
