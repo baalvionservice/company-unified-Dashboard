@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "user-alex-davis",
+      "description": "Avatar for Alex Davis",
+      "imageUrl": "https://picsum.photos/seed/user1/100/100",
+      "imageHint": "person face"
+    },
+    {
+      "id": "user-priya-sharma",
+      "description": "Avatar for Priya Sharma",
+      "imageUrl": "https://picsum.photos/seed/user2/100/100",
+      "imageHint": "person face"
+    },
+    {
+      "id": "user-john-smith",
+      "description": "Avatar for John Smith",
+      "imageUrl": "https://picsum.photos/seed/user3/100/100",
+      "imageHint": "person face"
+    },
+    {
+      "id": "user-li-wei",
+      "description": "Avatar for Li Wei",
+      "imageUrl": "https://picsum.photos/seed/user4/100/100",
+      "imageHint": "person face"
+    },
+    {
+      "id": "user-fatima-al-fassi",
+      "description": "Avatar for Fatima Al-Fassi",
+      "imageUrl": "https://picsum.photos/seed/user5/100/100",
+      "imageHint": "person face"
+    },
+    {
+      "id": "logo-techcorp",
+      "description": "Logo for TechCorp India",
+      "imageUrl": "https://picsum.photos/seed/logo1/100/100",
+      "imageHint": "tech logo"
+    },
+    {
+      "id": "logo-baalvion-media",
+      "description": "Logo for Baalvion Media UK",
+      "imageUrl": "https://picsum.photos/seed/logo2/100/100",
+      "imageHint": "media logo"
+    },
+    {
+      "id": "logo-retailchain",
+      "description": "Logo for RetailChain UAE",
+      "imageUrl": "https://picsum.photos/seed/logo3/100/100",
+      "imageHint": "retail logo"
+    },
+    {
+      "id": "logo-financehub",
+      "description": "Logo for FinanceHub USA",
+      "imageUrl": "https://picsum.photos/seed/logo4/100/100",
+      "imageHint": "finance logo"
+    },
+    {
+      "id": "logo-digitalagency",
+      "description": "Logo for DigitalAgency SG",
+      "imageUrl": "https://picsum.photos/seed/logo5/100/100",
+      "imageHint": "digital logo"
+    }
+  ]
 }
