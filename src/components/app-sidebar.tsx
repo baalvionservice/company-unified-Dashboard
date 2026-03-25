@@ -119,6 +119,7 @@ const navItems = [
   { href: '/security/permissions', icon: ShieldAlert, label: 'Permissions' },
   { href: '/docs/api', icon: BookCopy, label: 'API Docs' },
   { href: '/docs/help', icon: Book, label: 'Help Center' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AppSidebar() {
