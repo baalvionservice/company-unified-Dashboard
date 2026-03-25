@@ -5,6 +5,7 @@ import SettingsSidebar from './components/settings-sidebar';
 import GeneralSettings from './components/general-settings';
 import UsersRoles from './components/users-roles';
 import BusinessManagement from './components/business-management';
+import WhiteLabelSettings from './components/white-label-settings';
 
 type SettingsSection = 'general' | 'users' | 'businesses' | 'integrations' | 'billing' | 'security' | 'white-label' | 'danger-zone';
 
@@ -28,8 +29,9 @@ export default function SettingsPage() {
           {activeSection === 'general' && <GeneralSettings />}
           {activeSection === 'users' && <UsersRoles />}
           {activeSection === 'businesses' && <BusinessManagement />}
-          {/* Other sections can be added here */}
-          {(activeSection !== 'general' && activeSection !== 'users' && activeSection !== 'businesses') && (
+          {activeSection === 'white-label' && <WhiteLabelSettings />}
+          
+          {(activeSection !== 'general' && activeSection !== 'users' && activeSection !== 'businesses' && activeSection !== 'white-label') && (
              <div className="flex items-center justify-center h-96 border-2 border-dashed rounded-lg">
                 <p className="text-muted-foreground">Content for {activeSection.replace('-', ' ')} goes here.</p>
             </div>
