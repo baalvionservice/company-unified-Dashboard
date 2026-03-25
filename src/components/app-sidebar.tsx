@@ -13,6 +13,7 @@ import {
   Settings,
   ShieldCheck,
   Users,
+  Wand2,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -67,6 +68,7 @@ const navItems = [
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
+  { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/dashboard/equity', icon: FileText, label: 'Equity' },
   { href: '/dashboard/analytics', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
