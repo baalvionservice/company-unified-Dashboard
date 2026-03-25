@@ -10,15 +10,12 @@ import { Badge } from '@/components/ui/badge';
 import {
   RefreshCw,
   Clock,
-  DollarSign,
-  ShoppingCart,
-  Users,
   Building,
-  ArrowUp,
-  Table as TableIcon,
+  AlertTriangle,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Link from 'next/link';
 
 import onlineSalesData from '@/lib/data/online-sales.json';
 import offlineSalesData from '@/lib/data/offline-sales.json';
@@ -29,6 +26,7 @@ import OnlineVsOfflinePieChart from '@/components/charts/online-vs-offline-pie-c
 
 export default function SyncPage() {
   const totalToday = onlineSalesData.todaysRevenue + offlineSalesData.todaysRevenue;
+  const conflictCount = 3;
 
   return (
     <div className="space-y-8">
@@ -42,13 +40,22 @@ export default function SyncPage() {
             <RefreshCw className="h-4 w-4 animate-spin" />
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-              </span>
-              <span className="text-green-600 font-medium">All systems synced</span>
-            </div>
+            {conflictCount > 0 ? (
+               <Link href="/sync/conflicts">
+                   <Badge variant="destructive" className="cursor-pointer bg-orange-500 hover:bg-orange-600">
+                       <AlertTriangle className="mr-1 h-3 w-3" />
+                       {conflictCount} Conflicts
+                   </Badge>
+               </Link>
+            ) : (
+               <div className="flex items-center gap-2 text-sm">
+                 <span className="relative flex h-3 w-3">
+                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                   <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                 </span>
+                 <span className="text-green-600 font-medium">All systems synced</span>
+               </div>
+            )}
             <Button>
               <RefreshCw className="mr-2 h-4 w-4" />
               Sync Now
