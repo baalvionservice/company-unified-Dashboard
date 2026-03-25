@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   Card,
@@ -42,7 +45,11 @@ import type {
 import transactionsData from '@/lib/data/transactions.json';
 import businessesData from '@/lib/data/businesses.json';
 import { FilterBar } from './components/filter-bar';
-import { parse, isWithinInterval, startOfDay, endOfDay } from 'date-fns';
+import { parse, isWithinInterval, startOfDay, endOfDay, format } from 'date-fns';
+import RevenueByGatewayDonutChart from '@/components/charts/revenue-by-gateway-donut-chart';
+import MonthlyRevenueByGatewayChart from '@/components/charts/monthly-revenue-by-gateway-chart';
+import GatewayPerformanceTable from '@/components/gateway-performance-table';
+import TransactionDetail from './components/transaction-detail';
 
 type TransactionWithBusiness = Transaction & { businessName: string };
 
@@ -80,7 +87,7 @@ const statusConfig: Record<
   },
 };
 
-export default async function PaymentsPage({
+export default function PaymentsPage({
   searchParams,
 }: {
   searchParams?: {
@@ -92,13 +99,16 @@ export default async function PaymentsPage({
     page?: string;
   };
 }) {
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TransactionWithBusiness | null>(null);
+
   const allTransactions: TransactionWithBusiness[] = transactionsData.map(
     (tx: Transaction) => {
       const business = businesses.find((b) => b.id === tx.businessId);
       return { ...tx, businessName: business?.name || 'N/A' };
     }
   );
-  
+
   // Calculate stats from all transactions
   const totalCollected = allTransactions
     .filter((tx) => tx.status === 'Success')
@@ -114,7 +124,6 @@ export default async function PaymentsPage({
     .filter((tx) => tx.status === 'Pending')
     .reduce((sum, tx) => sum + tx.amount, 0);
 
-
   // Filtering logic
   const currentPage = Number(searchParams?.page || '1');
   const gateway = searchParams?.gateway;
@@ -126,12 +135,14 @@ export default async function PaymentsPage({
   const filteredTransactions = allTransactions.filter((tx) => {
     if (gateway && gateway !== 'all' && tx.gateway !== gateway) return false;
     if (status && status !== 'all' && tx.status !== status) return false;
-    if (businessId && businessId !== 'all' && tx.businessId !== businessId) return false;
+    if (businessId && businessId !== 'all' && tx.businessId !== businessId)
+      return false;
     if (from && to) {
-        const txDate = new Date(tx.date);
-        const fromDate = startOfDay(new Date(from));
-        const toDate = endOfDay(new Date(to));
-        if (!isWithinInterval(txDate, { start: fromDate, end: toDate })) return false;
+      const txDate = new Date(tx.date);
+      const fromDate = startOfDay(new Date(from));
+      const toDate = endOfDay(new Date(to));
+      if (!isWithinInterval(txDate, { start: fromDate, end: toDate }))
+        return false;
     }
     return true;
   });
@@ -164,7 +175,9 @@ export default async function PaymentsPage({
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalCollected.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              ${totalCollected.toLocaleString()}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -191,14 +204,29 @@ export default async function PaymentsPage({
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Payouts</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Payouts
+            </CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${pendingPayouts.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              ${pendingPayouts.toLocaleString()}
+            </div>
           </CardContent>
         </Card>
       </div>
+
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <div className="lg:col-span-2">
+          <RevenueByGatewayDonutChart transactions={allTransactions} />
+        </div>
+        <div className="lg:col-span-3">
+          <MonthlyRevenueByGatewayChart transactions={allTransactions} />
+        </div>
+      </div>
+
+      <GatewayPerformanceTable transactions={allTransactions} />
 
       <Card>
         <CardHeader>
@@ -229,7 +257,11 @@ export default async function PaymentsPage({
                 {paginatedTransactions.map((tx) => {
                   const StatusIcon = statusConfig[tx.status].icon;
                   return (
-                    <TableRow key={tx.id}>
+                    <TableRow
+                      key={tx.id}
+                      onClick={() => setSelectedTransaction(tx)}
+                      className="cursor-pointer"
+                    >
                       <TableCell className="font-medium">{tx.id}</TableCell>
                       <TableCell>{tx.businessName}</TableCell>
                       <TableCell>
@@ -261,9 +293,7 @@ export default async function PaymentsPage({
                           <span>{tx.status}</span>
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        {format(new Date(tx.date), 'PPpp')}
-                      </TableCell>
+                      <TableCell>{format(new Date(tx.date), 'PPpp')}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -271,13 +301,18 @@ export default async function PaymentsPage({
                               aria-haspopup="true"
                               size="icon"
                               variant="ghost"
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <MoreHorizontal className="h-4 w-4" />
                               <span className="sr-only">Toggle menu</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => setSelectedTransaction(tx)}
+                            >
+                              View Details
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Issue Refund</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -298,22 +333,40 @@ export default async function PaymentsPage({
             </strong>{' '}
             of <strong>{totalTransactions}</strong> transactions
           </div>
-           <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Link href={`?page=${Math.max(1, currentPage - 1)}`} passHref>
-                <Button variant="outline" size="sm" disabled={currentPage <= 1}>
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Previous
-                </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage <= 1}
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Previous
+              </Button>
             </Link>
-             <Link href={`?page=${Math.min(totalPages, currentPage + 1)}`} passHref>
-                <Button variant="outline" size="sm" disabled={currentPage >= totalPages}>
-                    Next
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
+            <Link
+              href={`?page=${Math.min(totalPages, currentPage + 1)}`}
+              passHref
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage >= totalPages}
+              >
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
             </Link>
           </div>
         </CardFooter>
       </Card>
+      <TransactionDetail
+        transaction={selectedTransaction}
+        isOpen={!!selectedTransaction}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setSelectedTransaction(null);
+        }}
+      />
     </div>
   );
 }

@@ -45,6 +45,7 @@ export interface Transaction {
     email: string;
   };
   amount: number;
+  fee: number;
   currency: Currency;
   status: TransactionStatus;
   date: string;
