@@ -1,12 +1,11 @@
-
 'use client';
 
+import { useState } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@/components/ui/card';
 import {
   Table,
@@ -19,17 +18,24 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, ArrowUp, ThumbsDown, ThumbsUp, Goal, Briefcase } from 'lucide-react';
+import { ArrowLeft, ArrowUp, ThumbsDown, ThumbsUp, Goal, Briefcase, Download, Share2, Loader2, CheckCircle } from 'lucide-react';
 
 import businessesData from '@/lib/data/businesses.json';
 import equityData from '@/lib/data/equity.json';
 import { format } from 'date-fns';
+import CreatePortalModal from '@/app/finance/reports/components/share-modal';
+import { useToast } from '@/hooks/use-toast';
 
 interface InvestorUpdatePreviewProps {
   onBack: () => void;
 }
 
 export default function InvestorUpdatePreview({ onBack }: InvestorUpdatePreviewProps) {
+  const [isShareModalOpen, setShareModalOpen] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [pdfReady, setPdfReady] = useState(false);
+  const { toast } = useToast();
+
   const businessPerformance = businessesData.map(biz => ({
       name: biz.name,
       revenue: biz.currentMetrics.revenue,
@@ -41,6 +47,19 @@ export default function InvestorUpdatePreview({ onBack }: InvestorUpdatePreviewP
   const investors = equityData[3].stakeholders.filter(s => s.role.includes('Investor'));
   const valuation = equityData[3].valuation;
   
+  const handleExportPdf = () => {
+    setExportingPdf(true);
+    setPdfReady(false);
+    setTimeout(() => {
+      setExportingPdf(false);
+      setPdfReady(true);
+      toast({
+        title: 'PDF Ready',
+        description: 'Your investor update is ready for download.',
+      });
+    }, 2000);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -49,13 +68,20 @@ export default function InvestorUpdatePreview({ onBack }: InvestorUpdatePreviewP
           Back to Dashboard
         </Button>
         <div className="flex items-center gap-2">
-          <Button>Download PDF</Button>
-          <Button variant="secondary">Share</Button>
+          <Button onClick={handleExportPdf} disabled={exportingPdf}>
+            {exportingPdf ? <Loader2 className="mr-2 animate-spin" /> : <Download />}
+            {exportingPdf ? 'Generating PDF...' : pdfReady ? 'PDF Ready' : 'Download PDF'}
+            {pdfReady && <CheckCircle className="ml-2" />}
+          </Button>
+          <Button variant="secondary" onClick={() => setShareModalOpen(true)}>
+            <Share2 className="mr-2 h-4 w-4" />
+            Share
+          </Button>
         </div>
       </div>
 
-      <Card className="p-4 sm:p-6 md:p-8">
-        <div className="mx-auto w-full max-w-4xl bg-card text-card-foreground">
+      <Card className="p-4 sm:p-6 md:p-8 bg-gray-100 dark:bg-gray-900">
+        <div className="mx-auto w-full max-w-4xl bg-card text-card-foreground shadow-2xl p-8 aspect-[1/1.414] overflow-y-auto">
           {/* Header */}
           <header className="mb-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -148,6 +174,7 @@ export default function InvestorUpdatePreview({ onBack }: InvestorUpdatePreviewP
           </section>
         </div>
       </Card>
+      <CreatePortalModal isOpen={isShareModalOpen} onOpenChange={setShareModalOpen} />
     </div>
   );
 }

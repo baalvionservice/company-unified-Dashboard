@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -24,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Download, Share2, View } from 'lucide-react';
-import reportsData from '@/lib/data/executive-reports.json';
+import reportsData from '@/lib/data/reports.json';
 
 export default function RecentReportsTable() {
   return (
@@ -42,8 +41,8 @@ export default function RecentReportsTable() {
               <TableRow>
                 <TableHead>Report Name</TableHead>
                 <TableHead>Type</TableHead>
+                <TableHead>Period</TableHead>
                 <TableHead>Generated</TableHead>
-                <TableHead>Pages</TableHead>
                 <TableHead>Size</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -53,8 +52,8 @@ export default function RecentReportsTable() {
                 <TableRow key={report.id}>
                   <TableCell className="font-medium">{report.name}</TableCell>
                   <TableCell>{report.type}</TableCell>
+                  <TableCell>{report.period}</TableCell>
                   <TableCell>{report.generated}</TableCell>
-                  <TableCell>{report.pages}</TableCell>
                   <TableCell>{report.size}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

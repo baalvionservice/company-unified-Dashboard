@@ -7,8 +7,8 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ArrowLeft, Download, Share2, Loader2, CheckCircle } from 'lucide-react';
 import type { ReportType } from '../page';
-import ShareModal from './share-modal';
-import RevenueByBusinessChart from '@/components/charts/revenue-by-business-chart'; // Reusing existing chart
+import CreatePortalModal from './share-modal';
+import RevenueByBusinessChart from '@/components/charts/revenue-by-business-chart';
 import { useToast } from '@/hooks/use-toast';
 
 interface ReportPreviewProps {
@@ -29,18 +29,25 @@ export default function ReportPreview({ reportType, onBack }: ReportPreviewProps
   const [isShareModalOpen, setShareModalOpen] = useState(false);
   const [exportingPdf, setExportingPdf] = useState(false);
   const [exportingXlsx, setExportingXlsx] = useState(false);
+  const [pdfReady, setPdfReady] = useState(false);
   const { toast } = useToast();
 
   const handleExport = (type: 'pdf' | 'xlsx') => {
     const setExporting = type === 'pdf' ? setExportingPdf : setExportingXlsx;
     setExporting(true);
+
+    if (type === 'pdf') setPdfReady(false);
+
     setTimeout(() => {
       setExporting(false);
-      toast({
-        title: 'Download Complete',
-        description: `Your ${type.toUpperCase()} report has been downloaded.`,
-        className: 'bg-green-100 border-green-300 text-green-800 dark:bg-green-950 dark:border-green-700 dark:text-green-300',
-      });
+      if (type === 'pdf') {
+          setPdfReady(true);
+      } else {
+        toast({
+            title: 'Download Complete',
+            description: `Your XLSX report has been downloaded.`,
+        });
+      }
     }, 2000);
   };
 
@@ -55,11 +62,12 @@ export default function ReportPreview({ reportType, onBack }: ReportPreviewProps
         <div className="flex items-center gap-2">
           <Button onClick={() => handleExport('pdf')} disabled={exportingPdf}>
             {exportingPdf ? <Loader2 className="mr-2 animate-spin" /> : <Download />}
-            {exportingPdf ? 'Exporting...' : 'Export PDF'}
+            {exportingPdf ? 'Exporting PDF...' : pdfReady ? 'PDF Ready' : 'Export PDF'}
+            {pdfReady && <CheckCircle className="ml-2" />}
           </Button>
           <Button variant="outline" onClick={() => handleExport('xlsx')} disabled={exportingXlsx}>
             {exportingXlsx ? <Loader2 className="mr-2 animate-spin" /> : <Download />}
-            {exportingXlsx ? 'Exporting...' : 'Export Excel'}
+            {exportingXlsx ? 'Exporting Excel...' : 'Export Excel'}
           </Button>
           <Button variant="secondary" onClick={() => setShareModalOpen(true)}>
             <Share2 />
@@ -68,8 +76,8 @@ export default function ReportPreview({ reportType, onBack }: ReportPreviewProps
         </div>
       </div>
 
-      <Card className="p-2 sm:p-4 md:p-8">
-        <div className="mx-auto w-full max-w-4xl bg-card text-card-foreground">
+      <Card className="p-2 sm:p-4 md:p-8 bg-gray-100 dark:bg-gray-900">
+        <div className="mx-auto w-full max-w-4xl bg-card text-card-foreground shadow-2xl p-8 aspect-[1/1.414] overflow-y-auto">
           {/* Report Header */}
           <header className="mb-8">
             <div className="flex items-center justify-between">
@@ -150,7 +158,7 @@ export default function ReportPreview({ reportType, onBack }: ReportPreviewProps
         </div>
       </Card>
       
-      <ShareModal isOpen={isShareModalOpen} onOpenChange={setShareModalOpen} />
+      <CreatePortalModal isOpen={isShareModalOpen} onOpenChange={setShareModalOpen} />
     </>
   );
 }
