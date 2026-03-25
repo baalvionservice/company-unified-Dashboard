@@ -30,6 +30,28 @@ export interface User {
   imageId: string;
 }
 
+export interface Employee {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    department: string;
+    businessId: string;
+    country: string;
+    status: string;
+    employmentType: string;
+    joinDate: string;
+    salary: number;
+    manager: string | null;
+    directReports: string[];
+    performance: {
+        score: number;
+        tasksCompleted: number;
+        attendance: number;
+    };
+    imageId: string;
+}
+
 export interface FxRate {
   [key: string]: number;
 }
@@ -117,4 +139,21 @@ export interface EquityData {
   valuation: number;
   stakeholders: Stakeholder[];
   equityHistory: EquityHistoryEvent[];
+}
+
+export interface Task {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    assigneeId: string;
+    businessId: string;
+    priority: 'High' | 'Medium' | 'Low';
+    dueDate: string;
+    comments: {
+        id: string;
+        authorId: string;
+        text: string;
+        timestamp: string;
+    }[];
 }
