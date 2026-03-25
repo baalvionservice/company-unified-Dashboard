@@ -10,15 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import fxRates from '@/lib/data/fx-rates.json';
-
-const ratesData = [
-  { currency: "US Dollar", code: "USD", symbol: "$", rate: 1.0000, change24h: 0, change7d: 0, lastUpdated: "now" },
-  { currency: "Indian Rupee", code: "INR", symbol: "₹", rate: 83.42, change24h: -0.12, change7d: 0.34, lastUpdated: "2 min ago" },
-  { currency: "British Pound", code: "GBP", symbol: "£", rate: 1.2634, change24h: 0.08, change7d: -0.21, lastUpdated: "2 min ago" },
-  { currency: "UAE Dirham", code: "AED", symbol: "د.إ", rate: 0.2723, change24h: 0, change7d: 0, lastUpdated: "2 min ago (pegged)" },
-  { currency: "Singapore Dollar", code: "SGD", symbol: "S$", rate: 0.7401, change24h: 0.03, change7d: 0.11, lastUpdated: "2 min ago" },
-];
+import ratesData from '@/lib/data/fx-rates-detailed.json';
 
 
 export default function FxRatesTable() {
@@ -36,7 +28,7 @@ export default function FxRatesTable() {
               <TableRow>
                 <TableHead>Currency</TableHead>
                 <TableHead>Code</TableHead>
-                <TableHead>Rate to USD</TableHead>
+                <TableHead>Rate vs USD</TableHead>
                 <TableHead>24h Change</TableHead>
                 <TableHead>7d Change</TableHead>
                 <TableHead>Last Updated</TableHead>

@@ -29,29 +29,34 @@ export default function CurrencyConverter() {
   const [amount, setAmount] = useState<number | string>(100);
   const [fromCurrency, setFromCurrency] = useState<Currency>('USD');
   const [toCurrency, setToCurrency] = useState<Currency>('INR');
-  const [result, setResult] = useState<number | null>(null);
 
-  const handleConvert = () => {
-    if (typeof amount !== 'number' || amount < 0) return;
-    
-    // Convert 'from' currency to USD first
-    const amountInUsd = amount / rates[fromCurrency];
-    
-    // Then convert from USD to 'to' currency
-    const convertedAmount = amountInUsd * rates[toCurrency];
-    
-    setResult(convertedAmount);
-  };
-  
+  useEffect(() => {
+    const savedFrom = localStorage.getItem('fromCurrency') as Currency | null;
+    const savedTo = localStorage.getItem('toCurrency') as Currency | null;
+    if (savedFrom && currencies.includes(savedFrom)) {
+      setFromCurrency(savedFrom);
+    }
+    if (savedTo && currencies.includes(savedTo)) {
+      setToCurrency(savedTo);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('fromCurrency', fromCurrency);
+    localStorage.setItem('toCurrency', toCurrency);
+  }, [fromCurrency, toCurrency]);
+
   const handleSwap = () => {
     const temp = fromCurrency;
     setFromCurrency(toCurrency);
     setToCurrency(temp);
   };
   
-  useEffect(() => {
-    handleConvert();
-  }, []);
+  let result: number | null = null;
+  if (typeof amount === 'number' && amount >= 0) {
+    const amountInUsd = amount / rates[fromCurrency];
+    result = amountInUsd * rates[toCurrency];
+  }
 
   return (
     <Card>
@@ -66,7 +71,7 @@ export default function CurrencyConverter() {
             id="amount" 
             type="number"
             value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            onChange={(e) => setAmount(Number(e.target.value) || '')}
             placeholder="Enter amount"
           />
         </div>
@@ -97,12 +102,10 @@ export default function CurrencyConverter() {
                 </Select>
             </div>
         </div>
-
-        <Button onClick={handleConvert} className="w-full">Convert</Button>
         
         {result !== null && (
             <div className="text-center pt-4">
-                <p className="text-sm text-muted-foreground">{amount} {fromCurrency} =</p>
+                <p className="text-sm text-muted-foreground">{Number(amount).toLocaleString()} {fromCurrency} =</p>
                 <p className="text-3xl font-bold">{result.toLocaleString(undefined, { maximumFractionDigits: 2 })} {toCurrency}</p>
             </div>
         )}

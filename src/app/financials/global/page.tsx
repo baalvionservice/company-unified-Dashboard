@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -66,7 +67,20 @@ const countryFinancials = countriesData.map(country => {
 });
 
 export default function GlobalFinancialsPage() {
-  const [selectedCountry, setSelectedCountry] = useState<string>('global');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const selectedCountry = searchParams.get('country') || 'global';
+
+  const handleCountryChange = (countryId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (countryId === 'global') {
+      params.delete('country');
+    } else {
+      params.set('country', countryId);
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   const countryDetails = useMemo(() => {
     if (selectedCountry === 'global') return null;
@@ -96,7 +110,7 @@ export default function GlobalFinancialsPage() {
             <p className="text-muted-foreground">An overview of your global financial performance.</p>
         </div>
         <div className="w-full sm:w-auto">
-            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+            <Select value={selectedCountry} onValueChange={handleCountryChange}>
                 <SelectTrigger className="w-full sm:w-[200px]">
                     <SelectValue placeholder="Select a view" />
                 </SelectTrigger>
