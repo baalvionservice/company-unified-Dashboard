@@ -3,10 +3,9 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
-import VideoModal from './video-modal';
+import Link from 'next/link';
 
 export default function HeroSection() {
-    const [isModalOpen, setModalOpen] = useState(false);
   return (
     <>
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32">
@@ -17,8 +16,12 @@ export default function HeroSection() {
                     Manage all your businesses, employees, finances, and equity — across every country — from one intelligent dashboard.
                 </p>
                 <div className="mt-8 flex justify-center gap-4">
-                    <Button size="lg">Start Free Trial</Button>
-                    <Button size="lg" variant="outline" onClick={() => setModalOpen(true)}>Watch Demo</Button>
+                    <Link href="/dashboard">
+                        <Button size="lg">Start Free Trial</Button>
+                    </Link>
+                    <Link href="/marketing/demo">
+                        <Button size="lg" variant="outline">Book a Demo</Button>
+                    </Link>
                 </div>
                 <div className="mt-6 flex justify-center gap-6 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-green-500" />SOC 2 Compliant</div>
@@ -42,7 +45,6 @@ export default function HeroSection() {
             </div>
         </div>
     </section>
-    <VideoModal isOpen={isModalOpen} onOpenChange={setModalOpen} />
     </>
   );
 }

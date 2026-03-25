@@ -33,8 +33,8 @@ export default function MarketingHeader() {
           <Link href="/dashboard">
             <Button variant="ghost">Log In</Button>
           </Link>
-          <Link href="/dashboard">
-            <Button>Start Free Trial</Button>
+          <Link href="/marketing/demo">
+            <Button>Book a Demo</Button>
           </Link>
         </div>
       </div>

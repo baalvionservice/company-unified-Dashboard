@@ -5,6 +5,8 @@ import StatsBar from './components/stats-bar';
 import HowItWorks from './components/how-it-works';
 import MarketingFooter from './components/marketing-footer';
 import MarketingHeader from './components/marketing-header';
+import PricingSection from './components/pricing-section';
+import FaqSection from './components/faq-section';
 
 export default function MarketingPage() {
   return (
@@ -16,6 +18,8 @@ export default function MarketingPage() {
         <FeaturesSection />
         <StatsBar />
         <HowItWorks />
+        <PricingSection />
+        <FaqSection />
       </main>
       <MarketingFooter />
     </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Github, Twitter, Linkedin } from 'lucide-react';
 
 const BaalvionLogo = () => (
     <svg
@@ -24,12 +25,17 @@ export default function MarketingFooter() {
           <div className="col-span-2 lg:col-span-1">
             <BaalvionLogo />
             <p className="mt-4 text-sm text-muted-foreground">The Global Business Operating System.</p>
+             <div className="mt-4 flex space-x-4">
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Github /></Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Twitter /></Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground"><Linkedin /></Link>
+            </div>
           </div>
           <div>
             <h4 className="font-semibold">Product</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link href="#" className="text-muted-foreground hover:text-foreground">Features</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-foreground">Pricing</Link></li>
+              <li><Link href="#features" className="text-muted-foreground hover:text-foreground">Features</Link></li>
+              <li><Link href="#pricing" className="text-muted-foreground hover:text-foreground">Pricing</Link></li>
               <li><Link href="#" className="text-muted-foreground hover:text-foreground">Updates</Link></li>
             </ul>
           </div>
@@ -38,7 +44,7 @@ export default function MarketingFooter() {
             <ul className="mt-4 space-y-2 text-sm">
               <li><Link href="#" className="text-muted-foreground hover:text-foreground">About</Link></li>
               <li><Link href="#" className="text-muted-foreground hover:text-foreground">Careers</Link></li>
-              <li><Link href="#" className="text-muted-foreground hover:text-foreground">Contact</Link></li>
+              <li><Link href="/marketing/demo" className="text-muted-foreground hover:text-foreground">Contact</Link></li>
             </ul>
           </div>
           <div>
