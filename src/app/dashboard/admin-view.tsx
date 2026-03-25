@@ -1,8 +1,13 @@
+
+'use client';
 import {
   ArrowUp,
   Briefcase,
   CircleDollarSign,
   Users,
+  BellRing,
+  Activity,
+  Building,
 } from 'lucide-react';
 import {
   Card,
@@ -29,6 +34,11 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import RevenueByBusinessChart from '@/components/charts/revenue-by-business-chart';
 import OverallPerformanceChart from '@/components/charts/overall-performance-chart';
 import AiInsightsCard from '@/components/ai-insights-card';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
+import operationsData from '@/lib/data/operations.json';
+import alertsData from '@/lib/data/alerts.json';
+import Link from 'next/link';
 
 const businesses: Business[] = businessesData;
 const fxRates: FxRate = fxRatesData;
@@ -56,7 +66,60 @@ const statusColors: Record<BusinessStatus, string> = {
     'border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
 };
 
+const getIconForActivity = (description: string) => {
+    if (description.includes('order')) return <CircleDollarSign className="h-4 w-4" />;
+    if (description.includes('clocked in')) return <Users className="h-4 w-4" />;
+    return <Briefcase className="h-4 w-4" />;
+}
+
 export default function AdminView() {
+  const isMobile = useIsMobile();
+  const revenueToday = operationsData.snapshot.todaysRevenue;
+  const recentAlerts = alertsData.slice(0, 3);
+  const recentActivities = operationsData.activityFeed.slice(0, 5);
+  
+  if (isMobile) {
+    return (
+        <div className="space-y-6">
+             <Card>
+                <CardHeader>
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Revenue Today</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-4xl font-bold">${revenueToday.toLocaleString()}</p>
+                </CardContent>
+            </Card>
+            <div className="grid grid-cols-3 gap-2">
+                <Button asChild variant="outline" className="flex-col h-20"><Link href="/analytics/businesses"><Building /><span className="text-xs mt-1">Businesses</span></Link></Button>
+                <Button asChild variant="outline" className="flex-col h-20"><Link href="/finance"><PiggyBank /><span className="text-xs mt-1">Finance</span></Link></Button>
+                <Button asChild variant="outline" className="flex-col h-20"><Link href="/employees"><Users /><span className="text-xs mt-1">Employees</span></Link></Button>
+            </div>
+            <Card>
+                <CardHeader><CardTitle className="flex items-center gap-2 text-lg"><BellRing /> Recent Alerts</CardTitle></CardHeader>
+                <CardContent className="space-y-3">
+                    {recentAlerts.map(alert => (
+                        <div key={alert.id} className="text-sm">{alert.title}</div>
+                    ))}
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader><CardTitle className="flex items-center gap-2 text-lg"><Activity /> Activity Feed</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                    {recentActivities.map(activity => (
+                        <div key={activity.id} className="flex items-start gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted mt-1">{getIconForActivity(activity.description)}</div>
+                            <div>
+                                <p className="text-sm">{activity.description}</p>
+                                <p className="text-xs text-muted-foreground">{activity.business} - {activity.timestamp}</p>
+                            </div>
+                        </div>
+                    ))}
+                </CardContent>
+            </Card>
+        </div>
+    )
+  }
+
   return (
     <>
       <div className="mb-6">

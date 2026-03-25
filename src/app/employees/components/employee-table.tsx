@@ -31,13 +31,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Search, ArrowLeft, ArrowRight } from 'lucide-react';
+import { MoreHorizontal, Search, ArrowLeft, ArrowRight, Filter } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import employeesData from '@/lib/data/employees.json';
@@ -57,6 +58,41 @@ type EmployeeTableProps = {
     page?: string;
   };
 };
+
+const departments = [...new Set(employeesData.map(e => e.department))];
+const statuses = [...new Set(employeesData.map(e => e.status))];
+
+function Filters({ searchParams, onFilterChange, onSearchChange }: { searchParams: EmployeeTableProps['searchParams'], onFilterChange: (name: string) => (value: string) => void, onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="relative flex-1">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input 
+          placeholder="Search by name..." 
+          className="pl-8 w-full"
+          defaultValue={searchParams?.q}
+          onChange={onSearchChange}
+        />
+      </div>
+      <Select value={searchParams?.business || 'all'} onValueChange={onFilterChange('business')}>
+        <SelectTrigger><SelectValue placeholder="Business" /></SelectTrigger>
+        <SelectContent><SelectItem value="all">All Businesses</SelectItem>{businessesData.map(b => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}</SelectContent>
+      </Select>
+      <Select value={searchParams?.country || 'all'} onValueChange={onFilterChange('country')}>
+        <SelectTrigger><SelectValue placeholder="Country" /></SelectTrigger>
+        <SelectContent><SelectItem value="all">All Countries</SelectItem>{countriesData.map(c => <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>)}</SelectContent>
+      </Select>
+      <Select value={searchParams?.department || 'all'} onValueChange={onFilterChange('department')}>
+        <SelectTrigger><SelectValue placeholder="Department" /></SelectTrigger>
+        <SelectContent><SelectItem value="all">All Departments</SelectItem>{departments.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+      </Select>
+      <Select value={searchParams?.status || 'all'} onValueChange={onFilterChange('status')}>
+        <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
+        <SelectContent><SelectItem value="all">All Statuses</SelectItem>{statuses.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+      </Select>
+    </div>
+  );
+}
 
 export default function EmployeeTable({ searchParams }: EmployeeTableProps) {
   const router = useRouter();
@@ -96,7 +132,7 @@ export default function EmployeeTable({ searchParams }: EmployeeTableProps) {
       const params = new URLSearchParams(currentSearchParams.toString());
       for (const [name, value] of Object.entries(paramsToUpdate)) {
         if (value) {
-          params.set(name, String(value));
+          params.set(String(value));
         } else {
           params.delete(name);
         }
@@ -115,9 +151,6 @@ export default function EmployeeTable({ searchParams }: EmployeeTableProps) {
      const params = { q: event.target.value || null, page: 1 };
      router.push(pathname + '?' + createQueryString(params));
   }
-  
-  const departments = [...new Set(employeesData.map(e => e.department))];
-  const statuses = [...new Set(employeesData.map(e => e.status))];
 
   return (
     <Card>
@@ -128,34 +161,84 @@ export default function EmployeeTable({ searchParams }: EmployeeTableProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap items-center gap-2 pb-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search by name..." 
-              className="pl-8 w-full md:w-[300px]"
-              defaultValue={searchParams?.q}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <Select value={searchParams?.business || 'all'} onValueChange={handleFilterChange('business')}>
-            <SelectTrigger className="w-full sm:w-auto"><SelectValue placeholder="Business" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All Businesses</SelectItem>{businessesData.map(b => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={searchParams?.country || 'all'} onValueChange={handleFilterChange('country')}>
-            <SelectTrigger className="w-full sm:w-auto"><SelectValue placeholder="Country" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All Countries</SelectItem>{countriesData.map(c => <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>)}</SelectContent>
-          </Select>
-           <Select value={searchParams?.department || 'all'} onValueChange={handleFilterChange('department')}>
-            <SelectTrigger className="w-full sm:w-auto"><SelectValue placeholder="Department" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All Departments</SelectItem>{departments.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={searchParams?.status || 'all'} onValueChange={handleFilterChange('status')}>
-            <SelectTrigger className="w-full sm:w-auto"><SelectValue placeholder="Status" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All Statuses</SelectItem>{statuses.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-          </Select>
+        {/* Mobile Filters */}
+        <div className="pb-4 md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="w-full">
+                <Filter className="mr-2 h-4 w-4" />
+                Filters
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Filter Employees</SheetTitle>
+              </SheetHeader>
+              <div className="py-4">
+                <Filters searchParams={searchParams} onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
-        <div className="rounded-md border">
+        {/* Desktop Filters */}
+        <div className="hidden md:flex flex-wrap items-center gap-2 pb-4">
+          <Filters searchParams={searchParams} onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="space-y-4 md:hidden">
+          {paginatedEmployees.map(employee => {
+            const image = PlaceHolderImages.find(img => img.id === employee.imageId);
+            return (
+              <Card key={employee.id} className="p-4">
+                <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                        <Avatar>
+                          {image && <AvatarImage src={image.imageUrl} />}
+                          <AvatarFallback>{employee.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <Link href={`/employees/${employee.id}`} className="font-medium hover:underline">{employee.name}</Link>
+                          <p className="text-xs text-muted-foreground">{employee.email}</p>
+                        </div>
+                    </div>
+                     <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" /><span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <Link href={`/employees/${employee.id}`} passHref><DropdownMenuItem>View Profile</DropdownMenuItem></Link>
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p className="text-muted-foreground">Role</p>
+                        <p>{employee.role}</p>
+                    </div>
+                     <div>
+                        <p className="text-muted-foreground">Business</p>
+                        <p>{getBusinessName(employee.businessId)}</p>
+                    </div>
+                     <div>
+                        <p className="text-muted-foreground">Country</p>
+                        <p>{employee.country}</p>
+                    </div>
+                    <div>
+                        <p className="text-muted-foreground">Status</p>
+                        <Badge variant="outline">{employee.status}</Badge>
+                    </div>
+                </div>
+              </Card>
+            )
+          })}
+        </div>
+        
+        {/* Desktop Table View */}
+        <div className="hidden md:block rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -174,16 +257,16 @@ export default function EmployeeTable({ searchParams }: EmployeeTableProps) {
                 return (
                   <TableRow key={employee.id}>
                     <TableCell>
-                      <div className="flex items-center gap-3">
+                      <Link href={`/employees/${employee.id}`} className="flex items-center gap-3 group">
                         <Avatar>
                           {image && <AvatarImage src={image.imageUrl} />}
                           <AvatarFallback>{employee.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{employee.name}</p>
+                          <p className="font-medium group-hover:underline">{employee.name}</p>
                           <p className="text-xs text-muted-foreground">{employee.email}</p>
                         </div>
-                      </div>
+                      </Link>
                     </TableCell>
                     <TableCell>{employee.role}</TableCell>
                     <TableCell>{getBusinessName(employee.businessId)}</TableCell>

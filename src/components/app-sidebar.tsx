@@ -51,6 +51,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -68,6 +69,8 @@ import businessesData from '@/lib/data/businesses.json';
 import users from '@/lib/data/users.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Business } from '@/lib/types';
+import { useIsMobile } from '@/hooks/use-mobile';
+import BottomNav from './bottom-nav';
 
 const allBusinesses: Business[] = businessesData;
 
@@ -87,7 +90,7 @@ const BaalvionLogo = () => (
   </svg>
 );
 
-const navItems = [
+export const navItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/operations', icon: LayoutDashboard, label: 'Daily Ops' },
   { href: '/operations/heatmap', icon: Grid3x3, label: 'Heatmap' },
@@ -129,6 +132,7 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isMobile = useIsMobile();
   const role = searchParams.get('role');
   const currentUser = users[0];
   const userImage = PlaceHolderImages.find(
@@ -153,6 +157,9 @@ export function AppSidebar() {
     businesses = allBusinesses.filter((b) => b.id === employeeBusinessId);
   }
 
+  if (isMobile) {
+    return <BottomNav />;
+  }
 
   return (
     <Sidebar>
