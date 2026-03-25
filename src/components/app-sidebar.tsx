@@ -83,6 +83,7 @@ const navItems = [
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/finance', icon: PiggyBank, label: 'Finance Overview' },
   { href: '/financials/global', icon: Banknote, label: 'Global Financials' },
+  { href: '/finance/reports', icon: Book, label: 'Reports' },
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/equity', icon: FileText, label: 'Equity' },
@@ -93,7 +94,6 @@ const navItems = [
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/dashboard/analytics', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
-  { href: '/dashboard/reports', icon: Book, label: 'Reports' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ];
 
