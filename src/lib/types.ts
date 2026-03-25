@@ -32,3 +32,20 @@ export interface User {
 export interface FxRate {
   [key: string]: number;
 }
+
+export type PaymentGateway = 'Stripe' | 'Razorpay' | 'PayPal';
+export type TransactionStatus = 'Success' | 'Failed' | 'Pending';
+
+export interface Transaction {
+  id: string;
+  businessId: string;
+  gateway: PaymentGateway;
+  customer: {
+    name: string;
+    email: string;
+  };
+  amount: number;
+  currency: Currency;
+  status: TransactionStatus;
+  date: string;
+}

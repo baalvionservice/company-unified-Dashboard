@@ -66,7 +66,7 @@ const navItems = [
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
-  { href: '/dashboard/finance', icon: CircleDollarSign, label: 'Finance' },
+  { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/dashboard/equity', icon: FileText, label: 'Equity' },
   { href: '/dashboard/analytics', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
