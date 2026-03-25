@@ -39,6 +39,9 @@ import { Button } from '@/components/ui/button';
 import operationsData from '@/lib/data/operations.json';
 import alertsData from '@/lib/data/alerts.json';
 import Link from 'next/link';
+import { PiggyBank } from 'lucide-react';
+import PushNotificationPrompt from '@/components/push-notification-prompt';
+
 
 const businesses: Business[] = businessesData;
 const fxRates: FxRate = fxRatesData;
@@ -81,6 +84,7 @@ export default function AdminView() {
   if (isMobile) {
     return (
         <div className="space-y-6">
+            <PushNotificationPrompt />
              <Card>
                 <CardHeader>
                     <CardTitle className="text-sm font-medium text-muted-foreground">Revenue Today</CardTitle>
@@ -128,6 +132,7 @@ export default function AdminView() {
           Welcome back! Here&apos;s a look at your business empire.
         </p>
       </div>
+      <PushNotificationPrompt />
       <div className="space-y-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>

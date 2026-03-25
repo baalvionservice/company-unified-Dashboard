@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import businessesData from '@/lib/data/businesses.json';
 import TrialBanner from './trial-banner';
 import RateLimitBanner from './rate-limit-banner';
+import OfflineBanner from './offline-banner';
 
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
@@ -66,6 +67,7 @@ export function Header() {
     <div className="sticky top-0 z-30 flex flex-col items-stretch bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent">
         <TrialBanner />
         <RateLimitBanner />
+        <OfflineBanner />
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <SidebarTrigger className="sm:hidden" />
             <div className="flex w-full items-center gap-4">

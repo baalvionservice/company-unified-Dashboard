@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import PwaLoader from '@/components/pwa-loader';
+import InstallPrompt from '@/components/install-prompt';
 
 export const metadata: Metadata = {
   title: 'Baalvion',
@@ -45,6 +46,7 @@ export default function RootLayout({
         {children}
         <PwaLoader />
         <Toaster />
+        <InstallPrompt />
       </body>
     </html>
   );
