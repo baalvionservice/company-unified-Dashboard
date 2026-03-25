@@ -20,6 +20,7 @@ import {
   Map,
   RefreshCw,
   Settings,
+  Shield,
   ShieldCheck,
   Target,
   Users,
@@ -101,6 +102,7 @@ const navItems = [
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
+  { href: '/security/audit', icon: Shield, label: 'Audit Logs' },
 ];
 
 export function AppSidebar() {
