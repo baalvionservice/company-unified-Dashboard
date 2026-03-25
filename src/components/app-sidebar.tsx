@@ -35,6 +35,7 @@ import {
   ShieldAlert,
   Scaling,
   BrainCircuit,
+  BookCopy,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -97,7 +98,8 @@ const navItems = [
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/finance', icon: PiggyBank, label: 'Finance Overview' },
   { href: '/financials/global', icon: Banknote, label: 'Global Financials' },
-  { href: '/finance/reports', icon: Book, label: 'Reports' },
+  { href: '/finance/reports', icon: Book, label: 'Ad-hoc Reports' },
+  { href: '/reports', icon: BookCopy, label: 'Exec. Reports' },
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/equity', icon: FileText, label: 'Equity' },
