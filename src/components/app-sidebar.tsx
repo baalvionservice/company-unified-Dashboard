@@ -34,6 +34,7 @@ import {
   BookLock,
   ShieldAlert,
   Scaling,
+  BrainCircuit,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -106,6 +107,7 @@ const navItems = [
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/ai', icon: Cpu, label: 'AI Intelligence' },
   { href: '/ai/simulator', icon: Scaling, label: 'Century Simulator' },
+  { href: '/ai/strategy', icon: BrainCircuit, label: 'Strategic Planner' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
   { href: '/compliance/gdpr', icon: BookLock, label: 'GDPR' },
