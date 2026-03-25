@@ -70,6 +70,15 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
     }
     
     const newPlanDetails = confirmingPlan ? pricingPlans.find(p => p.name === confirmingPlan) : null;
+    const currentPlanDetails = pricingPlans.find(p => p.name === currentPlan);
+
+    let proratedAmount = 0;
+    if (newPlanDetails && currentPlanDetails) {
+        const priceDifference = newPlanDetails.price - currentPlanDetails.price;
+        // Assuming 15 days remaining in a 30 day month for simplicity
+        const daysRemaining = 15; 
+        proratedAmount = (daysRemaining / 30) * priceDifference;
+    }
 
   return (
     <>
@@ -118,7 +127,7 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
                 <AlertDialogDescription>
                     You are about to switch to the <strong>{newPlanDetails?.name}</strong> plan for <strong>${newPlanDetails?.price}/month</strong>.
                     <br/><br/>
-                    Your new plan will be effective immediately. A prorated amount of $45.50 will be charged to your card on file.
+                    Your new plan will be effective immediately. A prorated amount of <strong>${proratedAmount.toFixed(2)}</strong> will be charged to your card on file.
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -126,7 +135,6 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
                 <AlertDialogAction onClick={handleConfirmChange}>Confirm Change</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
-    </AlertDialog>
     </>
   );
 }

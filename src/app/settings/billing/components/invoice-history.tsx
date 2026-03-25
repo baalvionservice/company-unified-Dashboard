@@ -5,15 +5,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, View, Download } from 'lucide-react';
+import { MoreHorizontal, View, Download, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import invoicesData from '@/lib/data/invoices.json';
 import { format } from 'date-fns';
 import type { Invoice } from '@/lib/types';
 import InvoiceDetailModal from './invoice-detail-modal';
+import { useToast } from '@/hooks/use-toast';
 
 export default function InvoiceHistory() {
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleDownload = (invoiceId: string) => {
+    setDownloadingId(invoiceId);
+    setTimeout(() => {
+        setDownloadingId(null);
+        toast({
+            title: "Download Complete",
+            description: `Invoice ${invoiceId}.pdf has been downloaded.`,
+        });
+    }, 1500);
+  }
 
   return (
     <>
@@ -54,8 +68,9 @@ export default function InvoiceHistory() {
                           <DropdownMenuItem onClick={() => setSelectedInvoice(invoice as Invoice)}>
                             <View className="mr-2 h-4 w-4" /> View
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Download className="mr-2 h-4 w-4" /> Download PDF
+                          <DropdownMenuItem onClick={() => handleDownload(invoice.id)} disabled={downloadingId === invoice.id}>
+                            {downloadingId === invoice.id ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                            {downloadingId === invoice.id ? 'Downloading...' : 'Download PDF'}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
