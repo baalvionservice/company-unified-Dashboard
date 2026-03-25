@@ -74,3 +74,10 @@ export interface KpiData {
 export interface AllKpis {
   [key: string]: KpiData[];
 }
+
+export interface ServerCost {
+  country: string;
+  provider: string;
+  cost: number;
+  services: string;
+}

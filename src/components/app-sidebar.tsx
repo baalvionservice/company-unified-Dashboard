@@ -2,6 +2,7 @@
 'use client';
 
 import {
+  Banknote,
   BarChart2,
   Book,
   Briefcase,
@@ -68,12 +69,13 @@ const BaalvionLogo = () => (
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
+  { href: '/kpis', icon: Target, label: 'KPIs' },
+  { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
+  { href: '/financials/global', icon: Banknote, label: 'Financials' },
+  { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
-  { href: '/countries', icon: Map, label: 'Countries' },
-  { href: '/kpis', icon: Target, label: 'KPIs' },
-  { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/dashboard/equity', icon: FileText, label: 'Equity' },
