@@ -36,6 +36,7 @@ import {
   Scaling,
   BrainCircuit,
   BookCopy,
+  Link as LinkIcon,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -100,6 +101,7 @@ const navItems = [
   { href: '/financials/global', icon: Banknote, label: 'Global Financials' },
   { href: '/finance/reports', icon: Book, label: 'Ad-hoc Reports' },
   { href: '/reports', icon: BookCopy, label: 'Exec. Reports' },
+  { href: '/reports/portals', icon: LinkIcon, label: 'Investor Portals' },
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/equity', icon: FileText, label: 'Equity' },
