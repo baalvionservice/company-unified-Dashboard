@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Settings,
   ShieldCheck,
+  Target,
   Users,
   Wand2,
 } from 'lucide-react';
@@ -68,6 +69,7 @@ const navItems = [
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
+  { href: '/kpis', icon: Target, label: 'KPIs' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },

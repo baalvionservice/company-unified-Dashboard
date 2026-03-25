@@ -50,3 +50,27 @@ export interface Transaction {
   status: TransactionStatus;
   date: string;
 }
+
+export type KpiPeriod = 'Day' | 'Week' | 'Month' | 'Quarter' | 'Year';
+
+export interface KpiData {
+  businessId: string;
+  revenue: {
+    target: number;
+    actual: number;
+  };
+  profitMargin: {
+    value: number;
+    trend: 'up' | 'down' | 'flat';
+  };
+  customers: {
+    total: number;
+    change: number;
+  };
+  returnRate: number;
+  nps: number;
+}
+
+export interface AllKpis {
+  [key: string]: KpiData[];
+}
