@@ -11,6 +11,7 @@ import {
   ChevronDown,
   CircleDollarSign,
   Cpu,
+  CreditCard,
   DollarSign,
   FileText,
   Globe,
@@ -122,6 +123,7 @@ const navItems = [
   { href: '/docs/api', icon: BookCopy, label: 'API Docs' },
   { href: '/docs/help', icon: Book, label: 'Help Center' },
   { href: '/settings', icon: Settings, label: 'Settings' },
+  { href: '/settings/billing', icon: CreditCard, label: 'Billing' },
 ];
 
 export function AppSidebar() {
