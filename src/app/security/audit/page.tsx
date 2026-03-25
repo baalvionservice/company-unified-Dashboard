@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -38,7 +37,7 @@ import { DateRange } from 'react-day-picker';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import auditLogsData from '@/lib/data/audit-logs.json';
 import usersData from '@/lib/data/users.json';
@@ -66,6 +65,14 @@ export default function AuditLogPage() {
     severity: 'all',
     status: 'all'
   });
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLastUpdated(new Date());
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleFilterChange = (filterName: string) => (value: string) => {
     setFilters(prev => ({...prev, [filterName]: value}));
@@ -106,7 +113,7 @@ export default function AuditLogPage() {
             <CardHeader>
               <CardTitle>Comprehensive Audit Trail</CardTitle>
               <CardDescription>
-                A detailed record of all actions performed within the application.
+                A detailed record of all actions performed within the application. Last updated: {formatDistanceToNow(lastUpdated, { addSuffix: true })}
               </CardDescription>
             </CardHeader>
             <CardContent>

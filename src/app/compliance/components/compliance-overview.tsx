@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -14,6 +17,13 @@ interface ComplianceOverviewProps {
 
 export default function ComplianceOverview({ complianceData }: ComplianceOverviewProps) {
   const overallScore = Math.round(complianceData.reduce((acc, c) => acc + c.overallScore, 0) / complianceData.length);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(overallScore), 150);
+    return () => clearTimeout(timer);
+  }, [overallScore]);
+  
   const taxCompliantCount = complianceData.filter(c => c.taxStatusCode === 'ok').length;
   const dataResidencyNeedsReview = complianceData.some(c => c.dataLaws.includes('Review'));
 
@@ -28,7 +38,7 @@ export default function ComplianceOverview({ complianceData }: ComplianceOvervie
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       <Card className="md:col-span-1 flex flex-col items-center justify-center p-6">
         <div className="relative h-24 w-24 mb-2">
-          <CircularProgress value={overallScore} strokeWidth={8} />
+          <CircularProgress value={progress} strokeWidth={8} />
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-3xl font-bold">{overallScore}</span>
             <span className="text-xs text-muted-foreground">/100</span>
