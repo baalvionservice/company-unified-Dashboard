@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Grid3x3, Building, PiggyBank, Users, MoreHorizontal, LogOut } from 'lucide-react';
+import { Grid3x3, Building, PiggyBank, Users, MoreHorizontal, LogOut, Briefcase } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -13,7 +13,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const mainNav = [
   { href: '/dashboard', icon: Grid3x3, label: 'Dashboard' },
-  { href: '/analytics/businesses', icon: Building, label: 'Businesses' },
+  { href: '/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/finance', icon: PiggyBank, label: 'Finance' },
   { href: '/employees', icon: Users, label: 'Employees' },
 ];

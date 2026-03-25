@@ -46,6 +46,7 @@ export const navItems = [
   { href: '/operations/heatmap', icon: Grid3x3, label: 'Heatmap' },
   { href: '/operations/alerts', icon: BellRing, label: 'Alerts' },
   { href: '/notifications', icon: Bell, label: 'Notifications' },
+  { href: '/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/employees', icon: Users, label: 'Employees' },
   { href: '/employees/attendance', icon: CalendarCheck, label: 'Attendance' },
   { href: '/employees/tasks', icon: ListChecks, label: 'Tasks' },
