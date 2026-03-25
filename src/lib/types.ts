@@ -172,3 +172,11 @@ export interface ComplianceRecord {
   overallScore: number;
   actionItems: string[];
 }
+
+export interface Invoice {
+  id: string;
+  period: string;
+  amount: number;
+  status: string;
+  paymentDate: string;
+}

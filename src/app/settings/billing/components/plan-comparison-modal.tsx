@@ -1,14 +1,24 @@
-
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-
+import { format } from 'date-fns';
 
 interface PlanComparisonModalProps {
   isOpen: boolean;
@@ -36,6 +46,7 @@ const pricingPlans = [
 
 export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan }: PlanComparisonModalProps) {
     const { toast } = useToast();
+    const [confirmingPlan, setConfirmingPlan] = useState<string | null>(null);
 
     const handleSelectPlan = (planName: string) => {
         if (planName === "Enterprise") {
@@ -43,19 +54,29 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
                 title: "Contacting Sales",
                 description: "Our sales team will be in touch with you shortly.",
             });
+            onOpenChange(false);
         } else {
-             toast({
-                title: "Coming Soon!",
-                description: "Self-serve plan management is under development."
-            });
+            setConfirmingPlan(planName);
         }
     }
 
+    const handleConfirmChange = () => {
+        toast({
+            title: "Plan Updated!",
+            description: `You have successfully changed to the ${confirmingPlan} plan.`,
+        });
+        setConfirmingPlan(null);
+        onOpenChange(false);
+    }
+    
+    const newPlanDetails = confirmingPlan ? pricingPlans.find(p => p.name === confirmingPlan) : null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <>
+    <Dialog open={isOpen && !confirmingPlan} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Upgrade Your Plan</DialogTitle>
+          <DialogTitle>Change Your Plan</DialogTitle>
           <DialogDescription>Choose the plan that fits your growing needs.</DialogDescription>
         </DialogHeader>
         <div className="py-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -81,7 +102,7 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
               </CardContent>
               <CardFooter>
                  <Button className="w-full" disabled={plan.name === currentPlan} onClick={() => handleSelectPlan(plan.name)}>
-                    {plan.name === 'Enterprise' ? 'Contact Sales' : 'Select Plan'}
+                    {plan.name === 'Enterprise' ? 'Contact Sales' : `Switch to ${plan.name}`}
                  </Button>
               </CardFooter>
             </Card>
@@ -89,5 +110,23 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
         </div>
       </DialogContent>
     </Dialog>
+
+    <AlertDialog open={!!confirmingPlan} onOpenChange={() => setConfirmingPlan(null)}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Confirm Plan Change</AlertDialogTitle>
+                <AlertDialogDescription>
+                    You are about to switch to the <strong>{newPlanDetails?.name}</strong> plan for <strong>${newPlanDetails?.price}/month</strong>.
+                    <br/><br/>
+                    Your new plan will be effective immediately. A prorated amount of $45.50 will be charged to your card on file.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setConfirmingPlan(null)}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleConfirmChange}>Confirm Change</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import PlanComparisonModal from './plan-comparison-modal';
-import { useToast } from '@/hooks/use-toast';
 
 interface Subscription {
     plan: string;
@@ -30,16 +28,8 @@ interface CurrentPlanProps {
 
 export default function CurrentPlan({ subscription }: CurrentPlanProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { toast } = useToast();
     const savedAmount = subscription.price * 12 - subscription.annualPrice;
     
-    const handleManagePlan = () => {
-        toast({
-            title: "Coming Soon!",
-            description: "Managing your plan directly is under development."
-        })
-    }
-
     return (
         <>
             <Card>
@@ -63,9 +53,8 @@ export default function CurrentPlan({ subscription }: CurrentPlanProps) {
                         <p><strong>Payment method:</strong> {subscription.paymentMethod.type} ending in {subscription.paymentMethod.last4}</p>
                     </div>
                 </CardContent>
-                <CardFooter className="gap-2">
-                    <Button onClick={() => setIsModalOpen(true)}>Upgrade to Enterprise</Button>
-                    <Button variant="outline" onClick={handleManagePlan}>Manage Plan</Button>
+                <CardFooter>
+                    <Button onClick={() => setIsModalOpen(true)}>Change Plan</Button>
                 </CardFooter>
             </Card>
             <PlanComparisonModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} currentPlan={subscription.plan} />
