@@ -99,7 +99,7 @@ const navItems = [
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/finance', icon: PiggyBank, label: 'Finance Overview' },
   { href: '/financials/global', icon: Banknote, label: 'Global Financials' },
-  { href: '/finance/reports', icon: Book, label: 'Ad-hoc Reports' },
+  { href: '/finance/reports', icon: FileText, label: 'Ad-hoc Reports' },
   { href: '/reports', icon: BookCopy, label: 'Exec. Reports' },
   { href: '/reports/portals', icon: LinkIcon, label: 'Investor Portals' },
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
@@ -117,6 +117,8 @@ const navItems = [
   { href: '/compliance/gdpr', icon: BookLock, label: 'GDPR' },
   { href: '/security/audit', icon: Shield, label: 'Audit Logs' },
   { href: '/security/permissions', icon: ShieldAlert, label: 'Permissions' },
+  { href: '/docs/api', icon: BookCopy, label: 'API Docs' },
+  { href: '/docs/help', icon: Book, label: 'Help Center' },
 ];
 
 export function AppSidebar() {
