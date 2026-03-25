@@ -25,8 +25,11 @@ import countriesData from '@/lib/data/countries.json';
 import DeepDive from './deep-dive';
 import type { Business } from '@/lib/types';
 
-const rankingData = analyticsData.ranking;
+const rankingData = analyticsData.ranking as RankingItem[];
 const allBusinesses: Business[] = businessesData;
+
+type RankingItem = (typeof analyticsData.ranking)[0];
+type SortableKey = 'rank' | 'revenue' | 'growth' | 'profit' | 'score';
 
 const getTrendIcon = (trend: 'up' | 'down' | 'flat') => {
   if (trend === 'up') return <ArrowUp className="h-4 w-4 text-green-500" />;
@@ -36,6 +39,34 @@ const getTrendIcon = (trend: 'up' | 'down' | 'flat') => {
 
 export default function BusinessRankingTable() {
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ key: SortableKey; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
+
+  const sortedData = React.useMemo(() => {
+    const sortableItems = [...rankingData];
+    sortableItems.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+    return sortableItems;
+  }, [sortConfig]);
+
+  const requestSort = (key: SortableKey) => {
+    let direction: 'asc' | 'desc' = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+  
+  const getSortIndicator = (key: SortableKey) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === 'asc' ? <ArrowUp className="ml-1 h-3 w-3" /> : <ArrowDown className="ml-1 h-3 w-3" />;
+  };
 
   const toggleRow = (businessId: string) => {
     setExpandedRow(expandedRow === businessId ? null : businessId);
@@ -46,7 +77,7 @@ export default function BusinessRankingTable() {
       <CardHeader>
         <CardTitle>Business Ranking</CardTitle>
         <CardDescription>
-          Businesses ranked by a composite performance score. Click a row to see more details.
+          Businesses ranked by a composite performance score. Click a column header to sort.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -54,18 +85,28 @@ export default function BusinessRankingTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-16">Rank</TableHead>
+                <TableHead className="w-16 cursor-pointer hover:bg-muted/50" onClick={() => requestSort('rank')}>
+                    <div className="flex items-center">Rank {getSortIndicator('rank')}</div>
+                </TableHead>
                 <TableHead>Business</TableHead>
                 <TableHead>Country</TableHead>
-                <TableHead className="text-right">Revenue (MoM)</TableHead>
-                <TableHead className="text-right">Growth</TableHead>
-                <TableHead className="text-right">Profit Margin</TableHead>
-                <TableHead className="text-right">Score</TableHead>
+                <TableHead className="text-right cursor-pointer hover:bg-muted/50" onClick={() => requestSort('revenue')}>
+                    <div className="flex items-center justify-end">Revenue (MoM) {getSortIndicator('revenue')}</div>
+                </TableHead>
+                <TableHead className="text-right cursor-pointer hover:bg-muted/50" onClick={() => requestSort('growth')}>
+                    <div className="flex items-center justify-end">Growth {getSortIndicator('growth')}</div>
+                </TableHead>
+                <TableHead className="text-right cursor-pointer hover:bg-muted/50" onClick={() => requestSort('profit')}>
+                    <div className="flex items-center justify-end">Profit Margin {getSortIndicator('profit')}</div>
+                </TableHead>
+                <TableHead className="text-right cursor-pointer hover:bg-muted/50" onClick={() => requestSort('score')}>
+                    <div className="flex items-center justify-end">Score {getSortIndicator('score')}</div>
+                </TableHead>
                 <TableHead className="w-24 text-right">Trend</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rankingData.map((item) => {
+              {sortedData.map((item) => {
                 const business = allBusinesses.find((b) => b.id === item.businessId);
                 const country = countriesData.find(c => c.name === business?.country);
                 if (!business) return null;
