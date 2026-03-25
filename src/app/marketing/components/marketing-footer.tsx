@@ -37,6 +37,7 @@ export default function MarketingFooter() {
               <li><Link href="#features" className="text-muted-foreground hover:text-foreground">Features</Link></li>
               <li><Link href="#pricing" className="text-muted-foreground hover:text-foreground">Pricing</Link></li>
               <li><Link href="#" className="text-muted-foreground hover:text-foreground">Updates</Link></li>
+              <li><Link href="#blog" className="text-muted-foreground hover:text-foreground">Blog</Link></li>
             </ul>
           </div>
           <div>

@@ -1,5 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 
 const BaalvionLogo = () => (
     <svg
@@ -18,8 +23,10 @@ const BaalvionLogo = () => (
   );
 
 export default function MarketingHeader() {
+    const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 p-4 bg-transparent">
+    <header className="sticky top-0 left-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/marketing">
           <BaalvionLogo />
@@ -27,15 +34,40 @@ export default function MarketingHeader() {
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link href="#features" className="hover:text-primary">Features</Link>
           <Link href="#pricing" className="hover:text-primary">Pricing</Link>
-          <Link href="/docs/help" className="hover:text-primary">Support</Link>
+          <Link href="/docs/help" className="hover:text-primary">Docs</Link>
+          <Link href="#blog" className="hover:text-primary">Blog</Link>
         </nav>
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="ghost">Log In</Button>
-          </Link>
-          <Link href="/marketing/demo">
-            <Button>Book a Demo</Button>
-          </Link>
+        <div className="hidden md:flex items-center gap-4">
+          <Button variant="ghost" asChild>
+            <Link href="/dashboard">Sign In</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/marketing/pricing">Get Started</Link>
+          </Button>
+        </div>
+        <div className="md:hidden">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Menu />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent>
+                    <nav className="flex flex-col gap-6 text-lg font-medium mt-8">
+                        <Link href="#features" onClick={() => setIsOpen(false)} className="hover:text-primary">Features</Link>
+                        <Link href="#pricing" onClick={() => setIsOpen(false)} className="hover:text-primary">Pricing</Link>
+                        <Link href="/docs/help" onClick={() => setIsOpen(false)} className="hover:text-primary">Docs</Link>
+                        <Link href="#blog" onClick={() => setIsOpen(false)} className="hover:text-primary">Blog</Link>
+                        <hr />
+                        <Button variant="ghost" asChild>
+                            <Link href="/dashboard">Sign In</Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href="/marketing/pricing">Get Started</Link>
+                        </Button>
+                    </nav>
+                </SheetContent>
+            </Sheet>
         </div>
       </div>
     </header>
