@@ -1,5 +1,4 @@
 import {
-  ArrowDown,
   ArrowUp,
   Briefcase,
   CircleDollarSign,
@@ -21,26 +20,41 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 import businessesData from '@/lib/data/businesses.json';
-import type { Business } from '@/lib/types';
+import fxRatesData from '@/lib/data/fx-rates.json';
+import type { Business, FxRate, BusinessStatus } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import RevenueByBusinessChart from '@/components/charts/revenue-by-business-chart';
 import OverallPerformanceChart from '@/components/charts/overall-performance-chart';
 import AiInsightsCard from '@/components/ai-insights-card';
 
 const businesses: Business[] = businessesData;
+const fxRates: FxRate = fxRatesData;
+
 const totalRevenue = businesses.reduce(
-  (acc, biz) => acc + biz.currentMetrics.revenue / 83.5,
+  (acc, biz) => acc + biz.currentMetrics.revenue / (fxRates[biz.currency] || 1),
   0
 );
 const totalProfit = businesses.reduce(
-  (acc, biz) => acc + biz.currentMetrics.profit / 83.5,
+  (acc, biz) => acc + biz.currentMetrics.profit / (fxRates[biz.currency] || 1),
   0
 );
 const totalEmployees = businesses.reduce(
   (acc, biz) => acc + biz.currentMetrics.employees,
   0
 );
+const countryCount = new Set(businesses.map((b) => b.country)).size;
+
+const statusColors: Record<BusinessStatus, string> = {
+  Active:
+    'border-green-300 bg-green-100 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-300',
+  Growth:
+    'border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300',
+  Review:
+    'border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
+};
 
 export default function DashboardPage() {
   return (
@@ -62,13 +76,12 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${(totalRevenue / 1000000).toFixed(2)}M
+                ${(totalRevenue / 1000000).toFixed(1)}M
               </div>
               <p className="text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <ArrowUp className="h-3 w-3 text-green-500" />
-                  <span className="text-green-500">+20.1%</span> from last
-                  month
+                  <span className="text-green-500">+12.4%</span> vs last month
                 </span>
               </p>
             </CardContent>
@@ -82,7 +95,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${(totalProfit / 1000000).toFixed(2)}M
+                ${(totalProfit / 1000000).toFixed(1)}M
               </div>
               <p className="text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -96,23 +109,22 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Active Businesses
+                Total Businesses
               </CardTitle>
               <Briefcase className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{businesses.length}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <ArrowUp className="h-3 w-3 text-green-500" />
-                  <span className="text-green-500">+1</span> since last quarter
-                </span>
+                Across {countryCount} countries
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Employees
+              </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -121,8 +133,8 @@ export default function DashboardPage() {
               </div>
               <p className="text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <ArrowDown className="h-3 w-3 text-red-500" />
-                  <span className="text-red-500">-2%</span> from last month
+                  <ArrowUp className="h-3 w-3 text-green-500" />
+                  <span className="text-green-500">+2%</span> from last quarter
                 </span>
               </p>
             </CardContent>
@@ -145,6 +157,7 @@ export default function DashboardPage() {
                     <TableRow>
                       <TableHead>Business</TableHead>
                       <TableHead>Country</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead className="text-right">Revenue</TableHead>
                       <TableHead className="text-right">Profit</TableHead>
                       <TableHead className="text-right">Employees</TableHead>
@@ -175,9 +188,22 @@ export default function DashboardPage() {
                             </div>
                           </TableCell>
                           <TableCell>{biz.country}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                'capitalize',
+                                statusColors[biz.status]
+                              )}
+                            >
+                              {biz.status}
+                            </Badge>
+                          </TableCell>
                           <TableCell className="text-right">
                             {biz.currency}{' '}
-                            {(biz.currentMetrics.revenue / 1_000_000).toFixed(2)}
+                            {(
+                              biz.currentMetrics.revenue / 1_000_000
+                            ).toFixed(2)}
                             M
                           </TableCell>
                           <TableCell className="text-right">

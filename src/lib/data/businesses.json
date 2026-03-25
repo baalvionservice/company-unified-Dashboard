@@ -7,10 +7,11 @@
     "country": "India",
     "countryCode": "in",
     "currency": "INR",
+    "status": "Growth",
     "currentMetrics": {
       "revenue": 75000000,
       "profit": 15000000,
-      "employees": 250,
+      "employees": 120,
       "domains": 15
     },
     "revenueHistory": [
@@ -34,10 +35,11 @@
     "country": "United Kingdom",
     "countryCode": "gb",
     "currency": "GBP",
+    "status": "Active",
     "currentMetrics": {
       "revenue": 5000000,
       "profit": 1200000,
-      "employees": 80,
+      "employees": 35,
       "domains": 25
     },
     "revenueHistory": [
@@ -62,10 +64,11 @@
     "country": "UAE",
     "countryCode": "ae",
     "currency": "AED",
+    "status": "Active",
     "currentMetrics": {
       "revenue": 120000000,
       "profit": 9000000,
-      "employees": 1200,
+      "employees": 50,
       "domains": 5
     },
     "revenueHistory": [
@@ -89,10 +92,11 @@
     "country": "USA",
     "countryCode": "us",
     "currency": "USD",
+    "status": "Growth",
     "currentMetrics": {
       "revenue": 25000000,
       "profit": 8000000,
-      "employees": 150,
+      "employees": 60,
       "domains": 8
     },
     "revenueHistory": [
@@ -117,10 +121,11 @@
     "country": "Singapore",
     "countryCode": "sg",
     "currency": "SGD",
+    "status": "Review",
     "currentMetrics": {
       "revenue": 2000000,
       "profit": 400000,
-      "employees": 45,
+      "employees": 19,
       "domains": 50
     },
     "revenueHistory": [

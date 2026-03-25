@@ -1,5 +1,6 @@
 export type Role = "ADMIN" | "INVESTOR" | "CO_FOUNDER" | "EMPLOYEE";
 export type Currency = "USD" | "INR" | "GBP" | "AED" | "SGD";
+export type BusinessStatus = "Active" | "Growth" | "Review";
 
 export interface Business {
   id: string;
@@ -8,6 +9,7 @@ export interface Business {
   country: string;
   countryCode: string;
   currency: Currency;
+  status: BusinessStatus;
   currentMetrics: {
     revenue: number;
     profit: number;
