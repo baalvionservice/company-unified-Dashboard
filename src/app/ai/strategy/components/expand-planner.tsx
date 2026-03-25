@@ -70,52 +70,54 @@ export default function ExpandPlanner() {
         </div>
 
         {results && (
-          <Card>
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle>AI Analysis for {industry} in {country}</CardTitle>
-                 <Badge>
-                    <Zap className="h-4 w-4 mr-1 text-yellow-400"/>
-                    {results.confidence}% Confidence
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <Card>
-                  <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><DollarSign/>Key Financials</CardTitle></CardHeader>
-                  <CardContent className="text-sm space-y-2">
-                    <p><span className="font-semibold">Estimated Setup Cost:</span> ${results.cost}</p>
-                    <p><span className="font-semibold">Time to First Revenue:</span> {results.timeToRevenue}</p>
-                  </CardContent>
-                </Card>
-                 <Card>
-                  <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><AlertTriangle/>Risk Assessment</CardTitle></CardHeader>
-                  <CardContent className="text-sm">
-                    <p><span className="font-semibold">Overall Risk Level:</span> <Badge variant="destructive" className="bg-orange-500">{results.riskLevel}</Badge></p>
-                  </CardContent>
-                </Card>
-              </div>
-              <div className="space-y-4">
-                <Card>
-                  <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><FileText />Regulatory Requirements</CardTitle></CardHeader>
-                  <CardContent>
-                    <ul className="list-disc list-inside text-sm space-y-1">
-                      {results.requirements.map((req, i) => <li key={i}>{req}</li>)}
-                    </ul>
-                  </CardContent>
-                </Card>
-                 <Card>
-                  <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><Building />Local Competitors</CardTitle></CardHeader>
-                  <CardContent>
-                    <ul className="list-disc list-inside text-sm space-y-1">
-                      {results.competitors.map((comp, i) => <li key={i}>{comp}</li>)}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="animate-in fade-in-0 duration-1000">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>AI Analysis for {industry} in {country}</CardTitle>
+                  <Badge>
+                      <Zap className="h-4 w-4 mr-1 text-yellow-400"/>
+                      {results.confidence}% Confidence
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><DollarSign/>Key Financials</CardTitle></CardHeader>
+                    <CardContent className="text-sm space-y-2">
+                      <p><span className="font-semibold">Estimated Setup Cost:</span> ${results.cost}</p>
+                      <p><span className="font-semibold">Time to First Revenue:</span> {results.timeToRevenue}</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><AlertTriangle/>Risk Assessment</CardTitle></CardHeader>
+                    <CardContent className="text-sm">
+                      <p><span className="font-semibold">Overall Risk Level:</span> <Badge variant="destructive" className="bg-orange-500">{results.riskLevel}</Badge></p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="space-y-4">
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><FileText />Regulatory Requirements</CardTitle></CardHeader>
+                    <CardContent>
+                      <ul className="list-disc list-inside text-sm space-y-1">
+                        {results.requirements.map((req, i) => <li key={i}>{req}</li>)}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base flex items-center gap-2"><Building />Local Competitors</CardTitle></CardHeader>
+                    <CardContent>
+                      <ul className="list-disc list-inside text-sm space-y-1">
+                        {results.competitors.map((comp, i) => <li key={i}>{comp}</li>)}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </CardContent>
     </Card>

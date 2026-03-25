@@ -60,26 +60,28 @@ export default function WindDownPlanner() {
         </div>
 
         {results && (
-          <Card>
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle>AI Simulation: Wind-Down Analysis</CardTitle>
-                 <Badge>
-                    <Zap className="h-4 w-4 mr-1 text-yellow-400"/>
-                    {results.confidence}% Confidence
-                </Badge>
-              </div>
-            </CardHeader>
-             <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">{results.summary}</p>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><FileWarning/>Liabilities</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-orange-500">${results.outstandingLiabilities}</p></CardContent></Card>
-                    <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><Users/>Severance</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-orange-500">${results.employeeSeverance}</p></CardContent></Card>
-                    <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><Building/>Asset Value</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-green-500">${results.assetLiquidationValue}</p></CardContent></Card>
-                    <Card className="bg-card/50 border-red-500"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><ShieldAlert/>Net Position</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-red-600">${results.netPosition}</p></CardContent></Card>
+          <div className="animate-in fade-in-0 duration-1000">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle>AI Simulation: Wind-Down Analysis</CardTitle>
+                  <Badge>
+                      <Zap className="h-4 w-4 mr-1 text-yellow-400"/>
+                      {results.confidence}% Confidence
+                  </Badge>
                 </div>
-            </CardContent>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">{results.summary}</p>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><FileWarning/>Liabilities</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-orange-500">${results.outstandingLiabilities}</p></CardContent></Card>
+                      <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><Users/>Severance</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-orange-500">${results.employeeSeverance}</p></CardContent></Card>
+                      <Card className="bg-card/50"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><Building/>Asset Value</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-green-500">${results.assetLiquidationValue}</p></CardContent></Card>
+                      <Card className="bg-card/50 border-red-500"><CardHeader className="pb-2"><CardTitle className="text-sm font-medium flex items-center gap-2"><ShieldAlert/>Net Position</CardTitle></CardHeader><CardContent><p className="text-2xl font-bold text-red-600">${results.netPosition}</p></CardContent></Card>
+                  </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </CardContent>
     </Card>
