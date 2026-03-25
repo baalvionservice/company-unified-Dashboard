@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/tooltip';
 import heatmapData from '@/lib/data/heatmap.json';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -35,6 +36,15 @@ const legend = [
 ];
 
 export default function PerformanceHeatmapPage() {
+  const { toast } = useToast();
+
+  const handleCellClick = (businessName: string, day: string) => {
+    toast({
+      title: `Drill-down for ${businessName}`,
+      description: `Showing detailed performance for ${day}. Feature coming soon.`,
+    });
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -68,25 +78,37 @@ export default function PerformanceHeatmapPage() {
               </div>
               {/* Data Rows */}
               {heatmapData.map((business) => (
-                <div key={business.businessId} className="grid grid-cols-8 gap-1 items-center">
-                  <div className="font-bold text-sm pr-2 text-right">{business.businessName}</div>
+                <div
+                  key={business.businessId}
+                  className="grid grid-cols-8 items-center gap-1"
+                >
+                  <div className="pr-2 text-right text-sm font-bold">
+                    {business.businessName}
+                  </div>
                   {business.dailyPerformance.map((perf) => {
                     const achievement = perf.revenue / perf.target;
                     return (
                       <Tooltip key={perf.day}>
                         <TooltipTrigger asChild>
                           <div
+                            onClick={() =>
+                              handleCellClick(business.businessName, perf.day)
+                            }
                             className={cn(
-                              'h-12 w-full rounded-md cursor-pointer transition-colors',
+                              'h-12 w-full cursor-pointer rounded-md transition-colors',
                               getPerfColor(achievement)
                             )}
                           ></div>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p className="font-bold">{business.businessName} - {perf.day}</p>
+                          <p className="font-bold">
+                            {business.businessName} - {perf.day}
+                          </p>
                           <p>Revenue: ${perf.revenue.toLocaleString()}</p>
                           <p>Target: ${perf.target.toLocaleString()}</p>
-                          <p>Achievement: {(achievement * 100).toFixed(1)}%</p>
+                          <p>
+                            Achievement: {(achievement * 100).toFixed(1)}%
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -100,18 +122,18 @@ export default function PerformanceHeatmapPage() {
 
       {/* Legend */}
       <Card>
-        <CardHeader className='pb-2'>
-            <CardTitle className='text-base'>Legend</CardTitle>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Legend</CardTitle>
         </CardHeader>
         <CardContent>
-             <div className="flex items-center justify-center gap-4">
-                {legend.map((item) => (
-                    <div key={item.label} className="flex items-center gap-2">
-                    <div className={cn('h-4 w-4 rounded', item.color)}></div>
-                    <span className="text-xs">{item.label}</span>
-                    </div>
-                ))}
-            </div>
+          <div className="flex items-center justify-center gap-4">
+            {legend.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <div className={cn('h-4 w-4 rounded', item.color)}></div>
+                <span className="text-xs">{item.label}</span>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

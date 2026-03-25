@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -34,7 +33,7 @@ import { formatDistanceToNow } from 'date-fns';
 import allNotificationsData from '@/lib/data/notifications.json';
 import type { Notification, NotificationType } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
   Alert: AlertTriangle,
@@ -56,6 +55,24 @@ export default function NotificationsPage() {
   const [activeTab, setActiveTab] = useState<FilterType>('All');
   const [notifications, setNotifications] =
     useState<Notification[]>(allNotificationsData);
+  const { toast } = useToast();
+
+  const getCount = (filter: FilterType) => {
+    if (filter === 'All') return notifications.length;
+    if (filter === 'Unread')
+      return notifications.filter((n) => !n.isRead).length;
+    return notifications.filter((n) => n.type === filter).length;
+  };
+
+  const unreadCount = getCount('Unread');
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
+    toast({
+      title: 'All notifications marked as read',
+      description: 'Your notification inbox is clear.',
+    });
+  };
 
   const filteredNotifications = useMemo(() => {
     if (activeTab === 'Unread') {
@@ -67,13 +84,14 @@ export default function NotificationsPage() {
     return notifications;
   }, [activeTab, notifications]);
 
-  const getCount = (filter: FilterType) => {
-    if (filter === 'All') return notifications.length;
-    if (filter === 'Unread') return notifications.filter(n => !n.isRead).length;
-    return notifications.filter(n => n.type === filter).length;
-  }
-
-  const tabs: FilterType[] = ['All', 'Unread', 'Alert', 'System', 'Finance', 'Team'];
+  const tabs: FilterType[] = [
+    'All',
+    'Unread',
+    'Alert',
+    'System',
+    'Finance',
+    'Team',
+  ];
 
   return (
     <div className="space-y-8">
@@ -86,111 +104,149 @@ export default function NotificationsPage() {
 
       <Card>
         <CardHeader>
-           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as FilterType)}>
-             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
-                {tabs.map(tab => (
-                    <TabsTrigger key={tab} value={tab}>
-                        {tab} <Badge variant="secondary" className="ml-2">{getCount(tab)}</Badge>
-                    </TabsTrigger>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <Tabs
+              value={activeTab}
+              onValueChange={(v) => setActiveTab(v as FilterType)}
+            >
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+                {tabs.map((tab) => (
+                  <TabsTrigger key={tab} value={tab}>
+                    {tab}{' '}
+                    <Badge variant="secondary" className="ml-2">
+                      {getCount(tab)}
+                    </Badge>
+                  </TabsTrigger>
                 ))}
-             </TabsList>
-           </Tabs>
+              </TabsList>
+            </Tabs>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleMarkAllAsRead}
+              disabled={unreadCount === 0}
+            >
+              Mark all as read
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
-            {filteredNotifications.length > 0 ? (
-                filteredNotifications.map((notification) => {
-                    const Icon = notificationIcons[notification.type];
-                    return (
-                    <div
-                        key={notification.id}
-                        className={cn(
-                        'flex items-start gap-4 rounded-lg border p-4',
-                        !notification.isRead && 'bg-blue-50/50 dark:bg-blue-950/20'
-                        )}
-                    >
-                        <div className={cn("mt-1 flex h-8 w-8 items-center justify-center rounded-full", notificationColors[notification.type])}>
-                             <Icon className="h-4 w-4" />
-                        </div>
-                        <div className="flex-1 space-y-1">
-                            <p className="font-medium">{notification.title}</p>
-                            <p className="text-sm text-muted-foreground">
-                                {notification.description}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {formatDistanceToNow(new Date(notification.timestamp), {
-                                addSuffix: true,
-                                })}
-                            </p>
-                        </div>
-                        {!notification.isRead && (
-                            <div className="h-3 w-3 flex-shrink-0 rounded-full bg-blue-500 mt-1" title="Unread" />
-                        )}
-                    </div>
-                    )
-                })
-            ) : (
-                <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-12 text-center">
-                    <CheckCircle className="h-12 w-12 text-green-500" />
-                    <h3 className="text-xl font-bold tracking-tight">All caught up!</h3>
+          {filteredNotifications.length > 0 ? (
+            filteredNotifications.map((notification) => {
+              const Icon = notificationIcons[notification.type];
+              return (
+                <div
+                  key={notification.id}
+                  className={cn(
+                    'flex items-start gap-4 rounded-lg border p-4',
+                    !notification.isRead && 'bg-blue-50/50 dark:bg-blue-950/20'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'mt-1 flex h-8 w-8 items-center justify-center rounded-full',
+                      notificationColors[notification.type]
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="font-medium">{notification.title}</p>
                     <p className="text-sm text-muted-foreground">
-                        You have no notifications in this category.
+                      {notification.description}
                     </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(new Date(notification.timestamp), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                  </div>
+                  {!notification.isRead && (
+                    <div
+                      className="mt-1 h-3 w-3 flex-shrink-0 rounded-full bg-blue-500"
+                      title="Unread"
+                    />
+                  )}
                 </div>
-            )}
+              );
+            })
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-12 text-center">
+              <CheckCircle className="h-12 w-12 text-green-500" />
+              <h3 className="text-xl font-bold tracking-tight">
+                All caught up!
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                You have no notifications in this category.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader>
-            <CardTitle>Notification Settings</CardTitle>
-            <CardDescription>Choose how you want to be notified.</CardDescription>
+          <CardTitle>Notification Settings</CardTitle>
+          <CardDescription>Choose how you want to be notified.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-            <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                    <Label htmlFor="email-realtime">Email Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive emails for important events.</p>
-                </div>
-                 <Switch id="email-realtime" defaultChecked />
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div>
+              <Label htmlFor="email-realtime">Email Notifications</Label>
+              <p className="text-sm text-muted-foreground">
+                Receive emails for important events.
+              </p>
             </div>
-            <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                    <Label htmlFor="critical-sms">Critical Revenue Alerts</Label>
-                    <p className="text-sm text-muted-foreground">Get an SMS and email for critical drops.</p>
-                </div>
-                 <div className="flex items-center gap-2">
-                     <Mail className="h-5 w-5 text-muted-foreground" />
-                     <Smartphone className="h-5 w-5 text-muted-foreground" />
-                     <Switch id="critical-sms" defaultChecked />
-                 </div>
+            <Switch id="email-realtime" defaultChecked />
+          </div>
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div>
+              <Label htmlFor="critical-sms">Critical Revenue Alerts</Label>
+              <p className="text-sm text-muted-foreground">
+                Get an SMS and email for critical drops.
+              </p>
             </div>
-             <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                    <Label htmlFor="employee-events">New Employee Events</Label>
-                    <p className="text-sm text-muted-foreground">Notify about new hires and role changes.</p>
-                </div>
-                 <div className="flex items-center gap-2">
-                     <Bell className="h-5 w-5 text-muted-foreground" />
-                     <Switch id="employee-events" defaultChecked />
-                 </div>
+            <div className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-muted-foreground" />
+              <Smartphone className="h-5 w-5 text-muted-foreground" />
+              <Switch id="critical-sms" defaultChecked />
             </div>
-            <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                    <Label htmlFor="weekly-summary">Weekly Summary Report</Label>
-                    <p className="text-sm text-muted-foreground">Email every Monday at 8 AM.</p>
-                </div>
-                 <Switch id="weekly-summary" />
+          </div>
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div>
+              <Label htmlFor="employee-events">New Employee Events</Label>
+              <p className="text-sm text-muted-foreground">
+                Notify about new hires and role changes.
+              </p>
             </div>
-             <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                    <Label htmlFor="maintenance-alerts">System Maintenance Alerts</Label>
-                    <p className="text-sm text-muted-foreground">Get notified about scheduled maintenance.</p>
-                </div>
-                 <Switch id="maintenance-alerts" defaultChecked />
+            <div className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-muted-foreground" />
+              <Switch id="employee-events" defaultChecked />
             </div>
+          </div>
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div>
+              <Label htmlFor="weekly-summary">Weekly Summary Report</Label>
+              <p className="text-sm text-muted-foreground">
+                Email every Monday at 8 AM.
+              </p>
+            </div>
+            <Switch id="weekly-summary" />
+          </div>
+          <div className="flex items-center justify-between rounded-lg border p-4">
+            <div>
+              <Label htmlFor="maintenance-alerts">
+                System Maintenance Alerts
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Get notified about scheduled maintenance.
+              </p>
+            </div>
+            <Switch id="maintenance-alerts" defaultChecked />
+          </div>
         </CardContent>
         <CardFooter>
-            <Button>Email Digest Preview</Button>
+          <Button>Email Digest Preview</Button>
         </CardFooter>
       </Card>
     </div>
