@@ -1,3 +1,4 @@
+
 export type Role = "ADMIN" | "INVESTOR" | "CO_FOUNDER" | "EMPLOYEE";
 export type Currency = "USD" | "INR" | "GBP" | "AED" | "SGD";
 export type BusinessStatus = "Active" | "Growth" | "Review";
@@ -73,6 +74,17 @@ export interface KpiData {
 
 export interface AllKpis {
   [key: string]: KpiData[];
+}
+
+export type NotificationType = 'Alert' | 'System' | 'Finance' | 'Team';
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  description: string;
+  timestamp: string;
+  isRead: boolean;
 }
 
 export interface ServerCost {

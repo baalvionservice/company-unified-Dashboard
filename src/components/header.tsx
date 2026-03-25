@@ -5,9 +5,41 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { UserNav } from '@/components/user-nav';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, AlertTriangle, DollarSign, Settings, Users } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import notificationsData from '@/lib/data/notifications.json';
+import { formatDistanceToNow } from 'date-fns';
+import { cn } from '@/lib/utils';
+import type { Notification, NotificationType } from '@/lib/types';
+
+
+const notificationIcons: Record<NotificationType, React.ElementType> = {
+  Alert: AlertTriangle,
+  Finance: DollarSign,
+  System: Settings,
+  Team: Users,
+};
+
+const notificationColors: Record<NotificationType, string> = {
+  Alert: 'text-red-500',
+  Finance: 'text-green-500',
+  System: 'text-blue-500',
+  Team: 'text-purple-500',
+};
+
 
 export function Header() {
+  const latestNotifications = notificationsData.slice(0, 5);
+  const unreadCount = notificationsData.filter(n => !n.isRead).length;
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <SidebarTrigger className="sm:hidden" />
@@ -20,15 +52,49 @@ export function Header() {
             className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
             />
         </div>
-        <div className="relative">
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Bell className="h-5 w-5" />
-                <span className="sr-only">Notifications</span>
-            </Button>
-            <div className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                3
-            </div>
-        </div>
+        
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                    <Bell className="h-5 w-5" />
+                    <span className="sr-only">Notifications</span>
+                    {unreadCount > 0 && (
+                         <div className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                            {unreadCount}
+                        </div>
+                    )}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-96">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div className="flex flex-col gap-1">
+                    {latestNotifications.map((notification) => {
+                        const Icon = notificationIcons[notification.type];
+                        return (
+                            <DropdownMenuItem key={notification.id} asChild>
+                                <Link href="/notifications" className="flex items-start gap-3 !p-2">
+                                    <Icon className={cn("mt-1 h-4 w-4", notificationColors[notification.type])} />
+                                    <div className="flex-1 space-y-1">
+                                        <p className="text-sm font-medium">{notification.title}</p>
+                                        <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                        <p className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}</p>
+                                    </div>
+                                    {!notification.isRead && <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>}
+                                </Link>
+                            </DropdownMenuItem>
+                        );
+                    })}
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                <Link href="/notifications" className="w-full justify-center text-sm font-medium text-primary hover:text-primary/90">
+                    View all notifications
+                </Link>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
       </div>
       <UserNav />
     </header>

@@ -22,7 +22,8 @@ import {
   Users,
   Wand2,
   Grid3x3,
-  BellRing
+  BellRing,
+  Bell,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -76,6 +77,7 @@ const navItems = [
   { href: '/operations', icon: LayoutDashboard, label: 'Daily Ops' },
   { href: '/operations/heatmap', icon: Grid3x3, label: 'Heatmap' },
   { href: '/operations/alerts', icon: BellRing, label: 'Alerts' },
+  { href: '/notifications', icon: Bell, label: 'Notifications' },
   { href: '/kpis', icon: Target, label: 'KPIs' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/financials/global', icon: Banknote, label: 'Financials' },
