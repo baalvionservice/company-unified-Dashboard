@@ -25,6 +25,7 @@ import {
   BellRing,
   Bell,
   PiggyBank,
+  TrendingUp,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -87,14 +88,11 @@ const navItems = [
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/equity', icon: FileText, label: 'Equity' },
-  { href: '/analytics/businesses', icon: BarChart2, label: 'Analytics' },
-  { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
+  { href: '/analytics/businesses', icon: BarChart2, label: 'Business Analytics' },
+  { href: '/analytics/forecast', icon: TrendingUp, label: 'Forecasting' },
   { href: '/analytics/domains', icon: Globe, label: 'Domains' },
-  { href: '/dashboard/team', icon: Users, label: 'Employees' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
-  { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
-  { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AppSidebar() {
