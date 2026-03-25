@@ -87,12 +87,12 @@ const navItems = [
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/equity', icon: FileText, label: 'Equity' },
+  { href: '/analytics/businesses', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
-  { href: '/dashboard/analytics', icon: BarChart2, label: 'Analytics' },
   { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ];
