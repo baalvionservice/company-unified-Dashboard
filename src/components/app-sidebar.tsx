@@ -30,6 +30,8 @@ import {
   Bell,
   PiggyBank,
   TrendingUp,
+  BookLock,
+  ShieldAlert,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -102,7 +104,9 @@ const navItems = [
   { href: '/automation', icon: Wand2, label: 'Automation' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
+  { href: '/compliance/gdpr', icon: BookLock, label: 'GDPR' },
   { href: '/security/audit', icon: Shield, label: 'Audit Logs' },
+  { href: '/security/permissions', icon: ShieldAlert, label: 'Permissions' },
 ];
 
 export function AppSidebar() {
