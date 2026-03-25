@@ -1,12 +1,12 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Grid3x3, Building, PiggyBank, Users, MoreHorizontal, LogOut, Briefcase } from 'lucide-react';
+import { Grid3x3, Building, PiggyBank, Users, MoreHorizontal, LogOut } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import { cn } from '@/lib/utils';
-import { navItems } from './app-sidebar';
+import { navItems } from '@/lib/nav-config';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import allUsers from '@/lib/data/users.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -19,7 +19,7 @@ const mainNav = [
 ];
 
 const secondaryNav = navItems.filter(
-  item => !mainNav.some(mainItem => mainItem.href === item.href || item.href.startsWith(mainItem.href + '/'))
+  item => !mainNav.some(mainItem => mainItem.href === item.href || item.href.startsWith(item.href + '/'))
 );
 
 export default function BottomNav() {
