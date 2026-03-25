@@ -10,9 +10,21 @@ import businessesData from '@/lib/data/businesses.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import AddBusinessModal from './add-business-modal';
 import { format } from 'date-fns';
+import limits from '@/lib/data/limits.json';
+import UpgradeModal from '@/components/upgrade-modal';
 
 export default function BusinessManagement() {
     const [isAddModalOpen, setAddModalOpen] = useState(false);
+    const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
+
+    const handleAddBusinessClick = () => {
+        // Assuming current plan is 'Pro' for demonstration
+        if (businessesData.length >= limits.pro.businesses) {
+            setUpgradeModalOpen(true);
+        } else {
+            setAddModalOpen(true);
+        }
+    };
 
     return (
         <>
@@ -23,7 +35,7 @@ export default function BusinessManagement() {
                             <CardTitle>Business Management</CardTitle>
                             <CardDescription>Manage your portfolio of businesses.</CardDescription>
                         </div>
-                        <Button onClick={() => setAddModalOpen(true)}><PlusCircle className="mr-2" /> Add Business</Button>
+                        <Button onClick={handleAddBusinessClick}><PlusCircle className="mr-2" /> Add Business</Button>
                     </div>
                 </CardHeader>
                 <CardContent className="grid gap-4 md:grid-cols-2">
@@ -62,6 +74,7 @@ export default function BusinessManagement() {
                 </CardContent>
             </Card>
             <AddBusinessModal isOpen={isAddModalOpen} onOpenChange={setAddModalOpen} />
+            <UpgradeModal isOpen={isUpgradeModalOpen} onOpenChange={setUpgradeModalOpen} />
         </>
     )
 }
