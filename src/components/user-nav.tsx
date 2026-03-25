@@ -1,9 +1,7 @@
+'use client';
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -26,11 +24,24 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Role } from '@/lib/types';
 
 export function UserNav() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const currentUser = users[0]; // Mock current user
   const userImage = PlaceHolderImages.find(
     (img) => img.id === currentUser.imageId
   );
   const roles: Role[] = ['ADMIN', 'INVESTOR', 'CO_FOUNDER', 'EMPLOYEE'];
+  const currentRole = (searchParams.get('role') as Role) || 'ADMIN';
+
+  const handleRoleChange = (role: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (role === 'ADMIN') {
+      params.delete('role');
+    } else {
+      params.set('role', role);
+    }
+    router.push(`/dashboard?${params.toString()}`);
+  };
 
   return (
     <DropdownMenu>
@@ -87,7 +98,10 @@ export function UserNav() {
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={currentUser.role}>
+              <DropdownMenuRadioGroup
+                value={currentRole}
+                onValueChange={handleRoleChange}
+              >
                 {roles.map((role) => (
                   <DropdownMenuRadioItem key={role} value={role}>
                     {role

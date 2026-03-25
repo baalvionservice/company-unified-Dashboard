@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -36,11 +36,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from './ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from './ui/badge';
 
-import businesses from '@/lib/data/businesses.json';
+import businessesData from '@/lib/data/businesses.json';
 import users from '@/lib/data/users.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import type { Business } from '@/lib/types';
+
+const allBusinesses: Business[] = businessesData;
 
 const BaalvionLogo = () => (
   <svg
@@ -73,10 +76,31 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const role = searchParams.get('role');
   const currentUser = users[0];
   const userImage = PlaceHolderImages.find(
     (img) => img.id === currentUser.imageId
   );
+
+  let businesses = allBusinesses;
+
+  if (role === 'INVESTOR') {
+    // As per prompt: TechCorp India, RetailChain UAE, DigitalAgency SG
+    const investorBusinessIds = ['biz_1', 'biz_3', 'biz_5'];
+    businesses = allBusinesses.filter((b) => investorBusinessIds.includes(b.id));
+  } else if (role === 'CO_FOUNDER') {
+    // As per prompt: TechCorp India, FinanceHub USA
+    const coFounderBusinessIds = ['biz_1', 'biz_4'];
+    businesses = allBusinesses.filter((b) =>
+      coFounderBusinessIds.includes(b.id)
+    );
+  } else if (role === 'EMPLOYEE') {
+    // An employee belongs to one business. Let's say DigitalAgency SG for Li Wei.
+    const employeeBusinessId = 'biz_5';
+    businesses = allBusinesses.filter((b) => b.id === employeeBusinessId);
+  }
+
 
   return (
     <Sidebar>
@@ -133,7 +157,7 @@ export function AppSidebar() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link href={item.href} passHref>
+              <Link href={{ pathname: item.href, query: { role: role || undefined } }} passHref>
                 <SidebarMenuButton
                   isActive={
                     pathname === item.href ||

@@ -23,8 +23,9 @@
       { "month": "Jun", "revenue": 75, "profit": 15 }
     ],
     "equitySplit": [
-      { "name": "Priya Sharma", "percentage": 60 },
-      { "name": "Startup-F", "percentage": 40 }
+      { "name": "Priya Sharma", "percentage": 40 },
+      { "name": "Startup-F", "percentage": 40 },
+      { "name": "John Smith", "percentage": 20 }
     ],
     "notableEvents": ["Launched new AI-powered analytics tool", "Expanded operations to Southeast Asia"]
   },
@@ -80,8 +81,9 @@
       { "month": "Jun", "revenue": 120, "profit": 9 }
     ],
     "equitySplit": [
-      { "name": "Fatima Al-Fassi", "percentage": 51 },
-      { "name": "Global Retail Group", "percentage": 49 }
+      { "name": "Fatima Al-Fassi", "percentage": 40 },
+      { "name": "Global Retail Group", "percentage": 45 },
+      { "name": "John Smith", "percentage": 15 }
     ],
     "notableEvents": ["Opened 10 new stores across the GCC", "Launched a loyalty program with 1M+ sign-ups"]
   },
@@ -108,8 +110,9 @@
       { "month": "Jun", "revenue": 25, "profit": 8.0 }
     ],
     "equitySplit": [
-      { "name": "John Smith", "percentage": 40 },
-      { "name": "Alex Davis", "percentage": 40 },
+      { "name": "John Smith", "percentage": 30 },
+      { "name": "Alex Davis", "percentage": 30 },
+      { "name": "Priya Sharma", "percentage": 20 },
       { "name": "Angel Investors", "percentage": 20 }
     ],
     "notableEvents": ["Received Series A funding of $15M", "Crossed 500,000 active users"]
@@ -137,7 +140,8 @@
       { "month": "Jun", "revenue": 2.0, "profit": 0.40 }
     ],
     "equitySplit": [
-      { "name": "Li Wei", "percentage": 100 }
+      { "name": "Li Wei", "percentage": 70 },
+      { "name": "John Smith", "percentage": 30 }
     ],
     "notableEvents": ["Won 'Agency of the Year' award", "Signed a major client in the automotive industry"]
   }
