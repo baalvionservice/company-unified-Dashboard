@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -10,6 +11,7 @@ import {
   Globe,
   Home,
   LogOut,
+  Map,
   RefreshCw,
   Settings,
   ShieldCheck,
@@ -69,6 +71,7 @@ const navItems = [
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
   { href: '/dashboard/team', icon: Users, label: 'Employees' },
+  { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/kpis', icon: Target, label: 'KPIs' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
   { href: '/automation', icon: Wand2, label: 'Automation' },
