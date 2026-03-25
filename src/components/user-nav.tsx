@@ -11,18 +11,26 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CreditCard, LogOut, Settings, User } from 'lucide-react';
+import { CreditCard, LogOut, Settings, User, Users } from 'lucide-react';
 import users from '@/lib/data/users.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import type { Role } from '@/lib/types';
 
 export function UserNav() {
   const currentUser = users[0]; // Mock current user
   const userImage = PlaceHolderImages.find(
     (img) => img.id === currentUser.imageId
   );
+  const roles: Role[] = ['ADMIN', 'INVESTOR', 'CO_FOUNDER', 'EMPLOYEE'];
 
   return (
     <DropdownMenu>
@@ -48,7 +56,9 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{currentUser.name}</p>
+            <p className="text-sm font-medium leading-none">
+              {currentUser.name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {currentUser.email}
             </p>
@@ -69,6 +79,26 @@ export function UserNav() {
             <span>Settings</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Users className="mr-2 h-4 w-4" />
+            <span>Switch Role</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={currentUser.role}>
+                {roles.map((role) => (
+                  <DropdownMenuRadioItem key={role} value={role}>
+                    {role
+                      .charAt(0) +
+                      role.slice(1).toLowerCase().replace(/_/g, '-')}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut className="mr-2 h-4 w-4" />

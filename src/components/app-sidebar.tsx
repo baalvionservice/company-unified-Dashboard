@@ -1,14 +1,17 @@
-
 'use client';
 
 import {
+  BarChart2,
+  Book,
   Briefcase,
   ChevronDown,
   CircleDollarSign,
+  FileText,
   Globe,
   Home,
   LogOut,
   Settings,
+  ShieldCheck,
   Users,
 } from 'lucide-react';
 
@@ -33,6 +36,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from './ui/button';
+import { Badge } from '@/components/ui/badge';
 
 import businesses from '@/lib/data/businesses.json';
 import users from '@/lib/data/users.json';
@@ -57,9 +61,14 @@ const BaalvionLogo = () => (
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
-  { href: '/dashboard/team', icon: Users, label: 'Team' },
-  { href: '/dashboard/finance', icon: CircleDollarSign, label: 'Finance' },
   { href: '/dashboard/domains', icon: Globe, label: 'Domains' },
+  { href: '/dashboard/team', icon: Users, label: 'Employees' },
+  { href: '/dashboard/finance', icon: CircleDollarSign, label: 'Finance' },
+  { href: '/dashboard/equity', icon: FileText, label: 'Equity' },
+  { href: '/dashboard/analytics', icon: BarChart2, label: 'Analytics' },
+  { href: '/dashboard/compliance', icon: ShieldCheck, label: 'Compliance' },
+  { href: '/dashboard/reports', icon: Book, label: 'Reports' },
+  { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AppSidebar() {
@@ -126,7 +135,10 @@ export function AppSidebar() {
             <SidebarMenuItem key={item.label}>
               <Link href={item.href} passHref>
                 <SidebarMenuButton
-                  isActive={pathname.startsWith(item.href)}
+                  isActive={
+                    pathname === item.href ||
+                    (item.href !== '/dashboard' && pathname.startsWith(item.href))
+                  }
                   tooltip={item.label}
                 >
                   <item.icon />
@@ -149,23 +161,21 @@ export function AppSidebar() {
                 {userImage && <AvatarImage src={userImage.imageUrl} />}
                 <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <div className="text-left">
+              <div className="space-y-1 text-left">
                 <p className="truncate text-sm font-medium text-sidebar-foreground">
                   {currentUser.name}
                 </p>
-                <p className="truncate text-xs text-sidebar-foreground/70">
-                  {currentUser.email}
-                </p>
+                <Badge
+                  variant="outline"
+                  className="h-5 border-sidebar-border bg-sidebar-accent text-xs capitalize text-sidebar-accent-foreground"
+                >
+                  {currentUser.role.toLowerCase().replace('_', '-')}
+                </Badge>
               </div>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="start" side="top">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut className="mr-2 h-4 w-4" />
