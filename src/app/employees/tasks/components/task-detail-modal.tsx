@@ -15,7 +15,7 @@ import type { Task, Employee, Business } from '@/lib/types';
 import businessesData from '@/lib/data/businesses.json';
 import employeesData from '@/lib/data/employees.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { Calendar, User, Briefcase, Tag } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 

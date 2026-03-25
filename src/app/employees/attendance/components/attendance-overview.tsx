@@ -1,5 +1,7 @@
+
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -10,6 +12,26 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { UserCheck, Clock, UserX } from 'lucide-react';
 import attendanceData from '@/lib/data/attendance.json';
+
+const BusinessAttendanceItem = ({ biz }: { biz: (typeof attendanceData.businessAttendance)[0] }) => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    // Animate the progress bar on mount
+    const timer = setTimeout(() => setProgress(biz.rate), 150);
+    return () => clearTimeout(timer);
+  }, [biz.rate]);
+
+  return (
+    <div>
+      <div className="flex justify-between text-sm mb-1">
+        <span>{biz.name}</span>
+        <span className="font-semibold">{biz.rate}%</span>
+      </div>
+      <Progress value={progress} className="transition-all duration-1000 ease-in-out" />
+    </div>
+  );
+};
 
 export default function AttendanceOverview() {
   const { overview, businessAttendance } = attendanceData;
@@ -45,13 +67,7 @@ export default function AttendanceOverview() {
           <h3 className="text-md font-medium mb-2">Attendance by Business</h3>
           <div className="space-y-4">
             {businessAttendance.map(biz => (
-              <div key={biz.businessId}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>{biz.name}</span>
-                  <span className="font-semibold">{biz.rate}%</span>
-                </div>
-                <Progress value={biz.rate} />
-              </div>
+              <BusinessAttendanceItem key={biz.businessId} biz={biz} />
             ))}
           </div>
         </div>

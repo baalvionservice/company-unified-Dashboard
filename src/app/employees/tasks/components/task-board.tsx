@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, type DragEvent } from 'react';
 import {
   Select,
   SelectContent,
@@ -33,6 +33,7 @@ import type { Employee, Task, Business } from '@/lib/types';
 import AddTaskModal from './add-task-modal';
 import TaskDetailModal from './task-detail-modal';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 type Status = 'To Do' | 'In Progress' | 'Review' | 'Done';
 const statuses: Status[] = ['To Do', 'In Progress', 'Review', 'Done'];
@@ -44,6 +45,7 @@ const priorityColors: Record<string, string> = {
 };
 
 export default function TaskBoard() {
+  const [allTasks, setAllTasks] = useState(tasksData as Task[]);
   const [filters, setFilters] = useState({
     search: '',
     business: 'all',
@@ -59,7 +61,7 @@ export default function TaskBoard() {
   };
 
   const filteredTasks = useMemo(() => {
-    return tasksData.filter((task) => {
+    return allTasks.filter((task) => {
       const assignee = employeesData.find(e => e.id === task.assigneeId);
       if (filters.search && !task.title.toLowerCase().includes(filters.search.toLowerCase())) return false;
       if (filters.business !== 'all' && task.businessId !== filters.business) return false;
@@ -68,7 +70,7 @@ export default function TaskBoard() {
       if (filters.department !== 'all' && assignee?.department !== filters.department) return false;
       return true;
     });
-  }, [filters]);
+  }, [filters, allTasks]);
 
   const tasksByStatus = useMemo(() => {
     const grouped: Record<Status, Task[]> = { 'To Do': [], 'In Progress': [], 'Review': [], 'Done': [] };
@@ -77,6 +79,24 @@ export default function TaskBoard() {
     }
     return grouped;
   }, [filteredTasks]);
+
+  const handleDragStart = (e: DragEvent<HTMLDivElement>, taskId: string) => {
+    e.dataTransfer.setData('taskId', taskId);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>, status: Status) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData('taskId');
+    setAllTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, status: status } : task
+      )
+    );
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -96,7 +116,12 @@ export default function TaskBoard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
         {statuses.map((status) => (
-          <div key={status} className="bg-muted/50 rounded-lg h-full">
+          <div 
+            key={status} 
+            className="bg-muted/50 rounded-lg h-full"
+            onDrop={(e) => handleDrop(e, status)}
+            onDragOver={handleDragOver}
+          >
             <h3 className="p-4 text-lg font-semibold sticky top-0 bg-muted/80 backdrop-blur-sm rounded-t-lg z-10">{status} <Badge variant="secondary">{tasksByStatus[status].length}</Badge></h3>
             <div className="p-4 space-y-4 h-full">
               {tasksByStatus[status].map((task) => {
@@ -105,7 +130,13 @@ export default function TaskBoard() {
                   const assigneeImage = assignee ? PlaceHolderImages.find(p => p.id === assignee.imageId) : null;
 
                   return (
-                    <Card key={task.id} className="cursor-pointer" onClick={() => setSelectedTask(task)}>
+                    <Card 
+                        key={task.id} 
+                        className="cursor-pointer" 
+                        onClick={() => setSelectedTask(task)}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, task.id)}
+                    >
                         <CardContent className="p-4">
                             <div className="flex items-start justify-between mb-2">
                                 <p className="font-medium pr-2">{task.title}</p>

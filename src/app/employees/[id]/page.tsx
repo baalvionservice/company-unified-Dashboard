@@ -26,6 +26,7 @@ import employeesData from '@/lib/data/employees.json';
 import businessesData from '@/lib/data/businesses.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Business } from '@/lib/types';
+import { CircularProgress } from '@/components/ui/circular-progress';
 
 export default function EmployeeProfilePage({ params }: { params: { id: string } }) {
   const employee = employeesData.find(e => e.id === params.id);
@@ -118,26 +119,34 @@ export default function EmployeeProfilePage({ params }: { params: { id: string }
                     <Card>
                         <CardHeader><CardTitle>Performance Metrics</CardTitle><CardDescription>This quarter's performance summary.</CardDescription></CardHeader>
                         <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="p-4 rounded-lg bg-muted flex items-center gap-4">
-                                <Star className="h-8 w-8 text-yellow-500" />
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Overall Score</p>
-                                    <p className="text-2xl font-bold">{employee.performance.score}/100</p>
+                            <div className="p-4 rounded-lg bg-muted flex flex-col items-center justify-center text-center gap-2">
+                                <div className="relative h-24 w-24">
+                                    <CircularProgress value={employee.performance.score} strokeWidth={8} />
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-2xl font-bold">{employee.performance.score}</span>
+                                        <span className="text-xs text-muted-foreground">/100</span>
+                                    </div>
                                 </div>
+                                <p className="text-sm font-medium">Overall Score</p>
                             </div>
-                            <div className="p-4 rounded-lg bg-muted flex items-center gap-4">
-                                <CheckCircle className="h-8 w-8 text-green-500" />
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Tasks Completed</p>
-                                    <p className="text-2xl font-bold">{employee.performance.tasksCompleted}</p>
+                           <div className="p-4 rounded-lg bg-muted flex flex-col items-center justify-center text-center gap-2">
+                                <div className="relative h-24 w-24">
+                                    <CircularProgress value={(employee.performance.tasksCompleted / 80) * 100} strokeWidth={8} />
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-2xl font-bold">{employee.performance.tasksCompleted}</span>
+                                        <span className="text-xs text-muted-foreground">Tasks</span>
+                                    </div>
                                 </div>
+                                <p className="text-sm font-medium">Tasks Completed</p>
                             </div>
-                             <div className="p-4 rounded-lg bg-muted flex items-center gap-4">
-                                <BarChart className="h-8 w-8 text-blue-500" />
-                                <div>
-                                    <p className="text-sm text-muted-foreground">Attendance</p>
-                                    <p className="text-2xl font-bold">{employee.performance.attendance}%</p>
+                             <div className="p-4 rounded-lg bg-muted flex flex-col items-center justify-center text-center gap-2">
+                                <div className="relative h-24 w-24">
+                                    <CircularProgress value={employee.performance.attendance} strokeWidth={8} />
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-2xl font-bold">{employee.performance.attendance}%</span>
+                                    </div>
                                 </div>
+                                <p className="text-sm font-medium">Attendance</p>
                             </div>
                         </CardContent>
                     </Card>
