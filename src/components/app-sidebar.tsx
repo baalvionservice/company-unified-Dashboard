@@ -24,6 +24,7 @@ import {
   Grid3x3,
   BellRing,
   Bell,
+  PiggyBank,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -80,7 +81,8 @@ const navItems = [
   { href: '/notifications', icon: Bell, label: 'Notifications' },
   { href: '/kpis', icon: Target, label: 'KPIs' },
   { href: '/payments', icon: CircleDollarSign, label: 'Payments' },
-  { href: '/financials/global', icon: Banknote, label: 'Financials' },
+  { href: '/finance', icon: PiggyBank, label: 'Finance Overview' },
+  { href: '/financials/global', icon: Banknote, label: 'Global Financials' },
   { href: '/currencies', icon: DollarSign, label: 'FX Rates' },
   { href: '/countries', icon: Map, label: 'Countries' },
   { href: '/dashboard/businesses', icon: Briefcase, label: 'Businesses' },
