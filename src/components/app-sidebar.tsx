@@ -6,6 +6,7 @@ import {
   Briefcase,
   ChevronDown,
   LogOut,
+  PanelLeft,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -62,6 +63,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
+  const { toggleSidebar } = useSidebar();
   const role = searchParams.get('role');
   const currentUser = users[0];
   const userImage = PlaceHolderImages.find(
@@ -99,7 +101,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar>
+    <Sidebar className="no-print">
       <SidebarHeader className="h-auto p-0">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -203,8 +205,19 @@ export function AppSidebar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <Button variant="ghost" size="icon" className="w-full justify-center text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent" onClick={toggleSidebar}>
+            <PanelLeft />
+        </Button>
         <div className="p-2 text-center text-xs text-sidebar-foreground/50">
           <BaalvionLogo />
+          <p className="mt-2">v2.1.0</p>
+          <p className="flex items-center justify-center gap-1 mt-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            All systems operational
+          </p>
         </div>
       </SidebarFooter>
     </Sidebar>

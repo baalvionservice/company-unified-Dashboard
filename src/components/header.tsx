@@ -143,7 +143,7 @@ export function Header() {
 
 
   return (
-    <div className="sticky top-0 z-30 flex flex-col items-stretch bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent">
+    <div className="sticky top-0 z-30 flex flex-col items-stretch bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent no-print">
         <DemoBanner />
         <TrialBanner />
         <RateLimitBanner />

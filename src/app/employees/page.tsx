@@ -6,6 +6,35 @@ import EmptyState from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { TableSkeleton } from '@/components/ui/table-skeleton';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+
+function EmployeePageSkeleton() {
+  return (
+    <div className="space-y-8">
+      <div>
+        <Skeleton className="h-9 w-64" />
+        <Skeleton className="h-5 w-96 mt-2" />
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-12" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-12" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-12" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-12" /></CardContent></Card>
+      </div>
+      <Card>
+        <CardHeader>
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="h-4 w-80 mt-2" />
+        </CardHeader>
+        <CardContent>
+            <TableSkeleton columns={7} rows={10} />
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
 
 export default function EmployeesPage({
   searchParams,
@@ -20,14 +49,21 @@ export default function EmployeesPage({
   };
 }) {
   const [isNewUser, setIsNewUser] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
     const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
     const setupComplete = localStorage.getItem('setup_complete') === 'true';
     if (!isDemo && !setupComplete) {
       setIsNewUser(true);
     }
+    return () => clearTimeout(timer);
   }, []);
+
+  if (loading) {
+    return <EmployeePageSkeleton />;
+  }
 
   if (isNewUser) {
     return (

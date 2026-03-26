@@ -46,10 +46,39 @@ import ProductTour from '@/components/product-tour';
 import Confetti from '@/components/confetti';
 import SetupChecklist from '@/components/setup-checklist';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const businesses: Business[] = businessesData;
 const fxRates: FxRate = fxRatesData;
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-8">
+      <div className="mb-6">
+        <Skeleton className="h-9 w-48" />
+        <Skeleton className="h-5 w-96 mt-2" />
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-16" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-16" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-16" /></CardContent></Card>
+        <Card><CardHeader><Skeleton className="h-5 w-24" /></CardHeader><CardContent><Skeleton className="h-7 w-16" /></CardContent></Card>
+      </div>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
+            <Skeleton className="h-[320px] w-full" />
+            <Skeleton className="h-[400px] w-full" />
+        </div>
+         <div className="grid auto-rows-max items-start gap-8">
+            <Skeleton className="h-[320px] w-full" />
+            <Skeleton className="h-[320px] w-full" />
+         </div>
+      </div>
+    </div>
+  );
+}
+
 
 const totalRevenue = businesses.reduce(
   (acc, biz) => acc + biz.currentMetrics.revenue / (fxRates[biz.currency] || 1),
@@ -86,6 +115,7 @@ export default function AdminView() {
   const recentAlerts = alertsData.slice(0, 3);
   const recentActivities = operationsData.activityFeed.slice(0, 5);
   const [tourVisible, setTourVisible] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   
   // New states for setup & celebration
   const [isNewUser, setIsNewUser] = React.useState(false);
@@ -123,12 +153,19 @@ export default function AdminView() {
     if (tourCompleted !== 'true') {
         setTimeout(() => setTourVisible(true), 500);
     }
+    
+    const loadingTimer = setTimeout(() => setLoading(false), 1500);
 
     return () => {
         window.removeEventListener('start-tour', handleStartTour);
         window.removeEventListener('celebrate', handleCelebration);
+        clearTimeout(loadingTimer);
     };
   }, [toast]);
+  
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
   
   if (isMobile) {
     return (

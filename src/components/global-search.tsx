@@ -11,7 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { FileText, Building, Users, Banknote } from 'lucide-react';
+import { FileText, Building, Users, Banknote, SearchX } from 'lucide-react';
 import businesses from '@/lib/data/businesses.json';
 import employees from '@/lib/data/employees.json';
 import reports from '@/lib/data/reports.json';
@@ -46,7 +46,13 @@ export default function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) 
         onValueChange={setSearch}
       />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>
+            <div className="py-6 text-center text-sm">
+                <SearchX className="mx-auto h-12 w-12 text-muted-foreground/50" />
+                <p className="mt-4 font-semibold">No results found</p>
+                <p className="mt-1 text-muted-foreground">Try searching for something else.</p>
+            </div>
+        </CommandEmpty>
         
         {searchResults.businesses.length > 0 && (
             <CommandGroup heading="Businesses">

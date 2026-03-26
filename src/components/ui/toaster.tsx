@@ -16,8 +16,11 @@ export function Toaster() {
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
+        const isSuccess = props.variant !== 'destructive';
+        const duration = isSuccess ? 3000 : Infinity;
+
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} {...props} duration={duration}>
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
@@ -26,6 +29,7 @@ export function Toaster() {
             </div>
             {action}
             <ToastClose />
+            {isSuccess && <div className="absolute bottom-0 left-0 h-1 bg-primary/20 toast-progress" style={{ animationDuration: `3000ms` }}/>}
           </Toast>
         )
       })}
