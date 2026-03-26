@@ -1,10 +1,13 @@
+// A basic service worker for PWA caching
+
 const CACHE_NAME = 'baalvion-cache-v1';
 const urlsToCache = [
   '/',
-  '/marketing',
+  '/dashboard',
   '/manifest.json',
+  '/favicon.ico',
   '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -22,24 +25,10 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(response => {
         if (response) {
-          return response; // Serve from cache
+          return response;
         }
-        return fetch(event.request); // Fetch from network
-      })
-  );
-});
-
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+        return fetch(event.request);
+      }
+    )
   );
 });

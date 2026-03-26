@@ -29,6 +29,9 @@ export default function SetupChecklist() {
     // In a real app, you'd navigate. Here, we'll just mark it as complete for demo purposes.
     setTimeout(() => {
         setTasks(tasks.map(task => task.id === taskId ? { ...task, completed: true } : task));
+        if (taskId === 'add_business') {
+            window.dispatchEvent(new CustomEvent('celebrate', { detail: { message: 'Your first business is live on Baalvion!' } }));
+        }
     }, 1000);
   };
 

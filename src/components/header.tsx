@@ -167,17 +167,24 @@ export function Header() {
                 </Select>
                 <TooltipProvider>
                     <div className="relative ml-auto flex flex-1 items-center gap-2 md:grow-0">
-                        <Button
-                            variant="outline"
-                            className="w-full justify-start text-muted-foreground md:w-[200px] lg:w-[320px]"
-                            onClick={openSearch}
-                        >
-                            <Search className="h-4 w-4 mr-2" />
-                            <span>Search...</span>
-                            <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                                <span className="text-xs">⌘</span>K
-                            </kbd>
-                        </Button>
+                        <Tooltip open={showSearchTooltip}>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start text-muted-foreground md:w-[200px] lg:w-[320px]"
+                                    onClick={openSearch}
+                                >
+                                    <Search className="h-4 w-4 mr-2" />
+                                    <span>Search...</span>
+                                    <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                                        <span className="text-xs">⌘</span>K
+                                    </kbd>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Search across all businesses, employees, and transactions</p>
+                            </TooltipContent>
+                        </Tooltip>
                         
                         <DropdownMenu>
                             <Tooltip open={showBellTooltip}>
