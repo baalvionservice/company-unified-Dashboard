@@ -18,10 +18,6 @@ const mainNav = [
   { href: '/employees', icon: Users, label: 'Employees' },
 ];
 
-const secondaryNav = navItems.filter(
-  item => !mainNav.some(mainItem => mainItem.href === item.href || item.href.startsWith(item.href + '/'))
-);
-
 export default function BottomNav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,6 +25,9 @@ export default function BottomNav() {
   const currentUser = allUsers[0];
   const userImage = PlaceHolderImages.find(img => img.id === currentUser.imageId);
 
+  const secondaryNav = navItems.filter(
+    item => !mainNav.some(mainItem => mainItem.href === item.href || (item.href !== '/dashboard' && item.href.startsWith(mainItem.href + '/')))
+  );
 
   return (
     <div className="md:hidden">
