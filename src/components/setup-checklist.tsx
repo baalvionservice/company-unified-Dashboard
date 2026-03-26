@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Circle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useToast } from './ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const initialTasks = [
   { id: 'create_account', text: 'Create your account', completed: true },
