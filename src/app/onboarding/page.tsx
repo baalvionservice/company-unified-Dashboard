@@ -50,7 +50,10 @@ export default function OnboardingPage() {
     router.push('/dashboard');
   };
 
-  const goToDashboard = () => {
+  const handleFinish = () => {
+    // In a real app, API calls would be made here with formData
+    // e.g., POST /api/onboarding/setup
+    localStorage.setItem('setup_complete', 'true');
     localStorage.removeItem('onboardingStep');
     localStorage.removeItem('onboardingData');
     router.push('/dashboard');
@@ -58,15 +61,14 @@ export default function OnboardingPage() {
 
   const steps = [
     { number: 1, title: "Welcome", component: <WelcomeStep onSetup={nextStep} onDemo={startDemo} /> },
-    { number: 2, title: "Business Setup", component: <BusinessSetupStep onNext={nextStep} onBack={prevStep} updateFormData={updateFormData} /> },
-    { number: 3, title: "Invite Your Team", component: <InviteTeamStep onNext={nextStep} onBack={prevStep} /> },
-    { number: 4, title: "Choose Your Plan", component: <PlanStep onNext={nextStep} onBack={prevStep} /> },
-    { number: 5, title: "All Done!", component: <CompletionStep onFinish={goToDashboard} /> },
+    { number: 2, title: "Business Setup", component: <BusinessSetupStep onNext={nextStep} onBack={prevStep} updateFormData={updateFormData} formData={formData} /> },
+    { number: 3, title: "Invite Your Team", component: <InviteTeamStep onNext={nextStep} onBack={prevStep} updateFormData={updateFormData} formData={formData} /> },
+    { number: 4, title: "Choose Your Plan", component: <PlanStep onNext={nextStep} onBack={prevStep} updateFormData={updateFormData} /> },
+    { number: 5, title: "All Done!", component: <CompletionStep onFinish={handleFinish} /> },
   ];
 
   const currentStepData = steps[step - 1];
-
-  const progress = (step / steps.length) * 100;
+  const progress = (step / (steps.length -1)) * 100; // Don't count welcome step in progress
 
   if (step === 1) {
     return currentStepData.component;
@@ -86,7 +88,7 @@ export default function OnboardingPage() {
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle>Onboarding</CardTitle>
-        <CardDescription>Step {currentStepData.number} of {steps.length}: {currentStepData.title}</CardDescription>
+        <CardDescription>Step {currentStepData.number - 1} of {steps.length - 2}: {currentStepData.title}</CardDescription>
         <Progress value={progress} className="w-full" />
       </CardHeader>
       <CardContent className="min-h-[300px]">

@@ -13,8 +13,7 @@ const setupSteps = [
     "Creating your workspace...",
     "Configuring business unit...",
     "Inviting team members...",
-    "Loading demo data...",
-    "Finalizing your dashboard..."
+    "Loading your dashboard..."
 ]
 
 export default function CompletionStep({ onFinish }: CompletionStepProps) {

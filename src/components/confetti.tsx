@@ -1,24 +1,44 @@
-
 'use client';
+import { useEffect } from 'react';
+
+declare global {
+  interface Window {
+    confetti: any;
+  }
+}
 
 interface ConfettiProps {
     show: boolean;
 }
 
 const Confetti = ({ show }: ConfettiProps) => {
-    if (!show) return null;
+    useEffect(() => {
+        if (show && typeof window.confetti === 'function') {
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
 
-    return (
-        <div className="fixed inset-0 pointer-events-none z-[200]">
-            {[...Array(150)].map((_, i) => (
-                <div key={i} className="confetti-piece" style={{
-                    left: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    '--confetti-color': `hsl(${Math.random() * 360}, 70%, 60%)`
-                } as React.CSSProperties}></div>
-            ))}
-        </div>
-    );
+            (function frame() {
+                window.confetti({
+                    particleCount: 2,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.7 }
+                });
+                window.confetti({
+                    particleCount: 2,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.7 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    }, [show]);
+
+    return null;
 };
 
 export default Confetti;

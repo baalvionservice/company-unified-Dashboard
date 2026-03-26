@@ -9,6 +9,7 @@ import Link from 'next/link';
 interface PlanStepProps {
   onNext: () => void;
   onBack: () => void;
+  updateFormData: (data: any) => void;
 }
 
 const pricingPlans = [
@@ -33,7 +34,12 @@ const pricingPlans = [
   },
 ];
 
-export default function PlanStep({ onNext, onBack }: PlanStepProps) {
+export default function PlanStep({ onNext, onBack, updateFormData }: PlanStepProps) {
+  const handleSelectPlan = (planName: string) => {
+    updateFormData({ plan: planName });
+    onNext();
+  };
+
   return (
     <div className="space-y-6">
        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -59,7 +65,7 @@ export default function PlanStep({ onNext, onBack }: PlanStepProps) {
                 </ul>
               </CardContent>
               <CardFooter>
-                 <Button className="w-full" variant={plan.popular ? 'default' : 'outline'} onClick={onNext}>
+                 <Button className="w-full" variant={plan.popular ? 'default' : 'outline'} onClick={() => handleSelectPlan(plan.name)}>
                     Start Free Trial
                  </Button>
               </CardFooter>
@@ -67,7 +73,7 @@ export default function PlanStep({ onNext, onBack }: PlanStepProps) {
           ))}
         </div>
          <p className="text-center text-sm text-muted-foreground">
-            Or <Button variant="link" className="p-0 h-auto" onClick={onNext}>continue with the free plan — upgrade later</Button>
+            Or <Button variant="link" className="p-0 h-auto" onClick={() => handleSelectPlan('Free')}>continue with the free plan — upgrade later</Button>
         </p>
         <div className="flex justify-between pt-4">
             <Button variant="outline" onClick={onBack}>Back</Button>

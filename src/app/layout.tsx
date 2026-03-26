@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import PwaLoader from '@/components/pwa-loader';
 import InstallPrompt from '@/components/install-prompt';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Baalvion',
@@ -37,6 +38,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#1A3C6E" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" async></script>
       </head>
       <body
         className={cn(
