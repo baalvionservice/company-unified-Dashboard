@@ -181,7 +181,7 @@ export default function AdminView() {
                 </CardContent>
             </Card>
             <div className="grid grid-cols-3 gap-2">
-                <Button asChild variant="outline" className="flex-col h-20"><Link href="/analytics/businesses"><Building /><span className="text-xs mt-1">Businesses</span></Link></Button>
+                <Button asChild variant="outline" className="flex-col h-20"><Link href="/businesses"><Building /><span className="text-xs mt-1">Businesses</span></Link></Button>
                 <Button asChild variant="outline" className="flex-col h-20"><Link href="/finance"><PiggyBank /><span className="text-xs mt-1">Finance</span></Link></Button>
                 <Button asChild variant="outline" className="flex-col h-20"><Link href="/employees"><Users /><span className="text-xs mt-1">Employees</span></Link></Button>
             </div>

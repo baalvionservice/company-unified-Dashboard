@@ -5,7 +5,7 @@ import { Header } from '@/components/header';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import QuickActionsFAB from '@/components/quick-actions-fab';
 
-export default function NotificationsLayout({ children }: { children: ReactNode }) {
+export default function BusinessesLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />

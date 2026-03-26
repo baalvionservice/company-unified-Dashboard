@@ -27,6 +27,7 @@ import {
   Bell,
   Mail,
   Smartphone,
+  Trash2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
@@ -56,6 +57,13 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] =
     useState<Notification[]>(allNotificationsData);
   const { toast } = useToast();
+
+  const handleDismiss = (notificationId: string) => {
+    setNotifications(notifications.filter((n) => n.id !== notificationId));
+    toast({
+      title: 'Notification Dismissed',
+    });
+  };
 
   const getCount = (filter: FilterType) => {
     if (filter === 'All') return notifications.length;
@@ -138,7 +146,7 @@ export default function NotificationsPage() {
                 <div
                   key={notification.id}
                   className={cn(
-                    'flex items-start gap-4 rounded-lg border p-4',
+                    'flex items-start gap-4 rounded-lg border p-4 group',
                     !notification.isRead && 'bg-blue-50/50 dark:bg-blue-950/20'
                   )}
                 >
@@ -167,6 +175,9 @@ export default function NotificationsPage() {
                       title="Unread"
                     />
                   )}
+                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 sm:opacity-100" onClick={() => handleDismiss(notification.id)}>
+                      <Trash2 className="h-4 w-4" />
+                   </Button>
                 </div>
               );
             })

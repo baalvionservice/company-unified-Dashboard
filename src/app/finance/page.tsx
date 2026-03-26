@@ -28,11 +28,17 @@ import { cn } from '@/lib/utils';
 import EmptyState from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import NetWorthCard from './components/net-worth-card';
+import FinanceStatCards from './components/finance-stat-cards';
+import DailyRevenueChart from './components/daily-revenue-chart';
+import Link from 'next/link';
 
 const allBusinesses: Business[] = businessesData;
 
 export default function FinanceOverviewPage() {
   const [isNewUser, setIsNewUser] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
@@ -60,6 +66,23 @@ export default function FinanceOverviewPage() {
             />
         </div>
     );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="space-y-6">
+         <div>
+            <h1 className="text-3xl font-bold tracking-tight">Finance</h1>
+            <p className="text-muted-foreground">
+              A mobile overview of your finances.
+            </p>
+          </div>
+        <NetWorthCard />
+        <FinanceStatCards />
+        <DailyRevenueChart />
+        <Button asChild className="w-full" size="lg"><Link href="/finance/reports">Generate Report</Link></Button>
+      </div>
+    )
   }
 
   const { netWorth, financialSummary } = financeData;

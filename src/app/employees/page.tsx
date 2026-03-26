@@ -9,6 +9,9 @@ import { useState, useEffect } from 'react';
 import { TableSkeleton } from '@/components/ui/table-skeleton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useIsMobile } from '@/hooks/use-mobile';
+import AttendanceSummary from './components/attendance-summary';
+import MobileEmployeeList from './components/mobile-employee-list';
 
 function EmployeePageSkeleton() {
   return (
@@ -46,10 +49,13 @@ export default function EmployeesPage({
     department?: string;
     status?: string;
     page?: string;
+    role?: string;
   };
 }) {
   const [isNewUser, setIsNewUser] = useState(false);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
+  const role = searchParams?.role;
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1500);
@@ -82,6 +88,24 @@ export default function EmployeesPage({
                 actionButton={<Button size="lg"><PlusCircle className="mr-2" /> Add Employee</Button>}
             />
         </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Employees</h1>
+          <p className="text-muted-foreground">
+            Manage your team on the go.
+          </p>
+        </div>
+        {role === 'EMPLOYEE' && (
+            <Button size="lg" className="w-full h-16 text-lg">Clock In</Button>
+        )}
+        {role !== 'EMPLOYEE' && <AttendanceSummary />}
+        <MobileEmployeeList />
+      </div>
     );
   }
 

@@ -10,6 +10,7 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import GlobalSearch from '@/components/global-search';
 import QuickSwitcher from '@/components/quick-switcher';
 import ShortcutsHelp from '@/components/shortcuts-help';
+import QuickActionsFAB from '@/components/quick-actions-fab';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -90,6 +91,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
       <QuickSwitcher open={switcherOpen} onOpenChange={setSwitcherOpen} />
       <ShortcutsHelp open={helpOpen} onOpenChange={setHelpOpen} />
+      <QuickActionsFAB />
     </>
   );
 }
