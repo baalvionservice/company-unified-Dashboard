@@ -1,5 +1,4 @@
 
-
 'use client';
 import * as React from 'react';
 import {
@@ -44,6 +43,9 @@ import Link from 'next/link';
 import { PiggyBank } from 'lucide-react';
 import PushNotificationPrompt from '@/components/push-notification-prompt';
 import ProductTour from '@/components/product-tour';
+import Confetti from '@/components/confetti';
+import SetupChecklist from '@/components/setup-checklist';
+import { useToast } from '@/components/ui/use-toast';
 
 
 const businesses: Business[] = businessesData;
@@ -84,27 +86,55 @@ export default function AdminView() {
   const recentAlerts = alertsData.slice(0, 3);
   const recentActivities = operationsData.activityFeed.slice(0, 5);
   const [tourVisible, setTourVisible] = React.useState(false);
+  
+  // New states for setup & celebration
+  const [isNewUser, setIsNewUser] = React.useState(false);
+  const [showConfetti, setShowConfetti] = React.useState(false);
+  const { toast } = useToast();
 
   React.useEffect(() => {
+    const tourCompleted = localStorage.getItem('baalvion_tour_completed');
+    const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
+
+    // Show setup checklist for non-demo new users
+    if (!isDemo && tourCompleted !== 'true') {
+        setIsNewUser(true);
+    }
+
     const handleStartTour = () => {
       localStorage.removeItem('baalvion_tour_completed');
       setTourVisible(true);
     };
-    window.addEventListener('start-tour', handleStartTour);
 
-    const tourCompleted = localStorage.getItem('baalvion_tour_completed');
+    const handleCelebration = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        setShowConfetti(true);
+        toast({
+            title: "🎉 Congratulations!",
+            description: customEvent.detail.message,
+            className: 'bg-green-100 border-green-300 text-green-800 dark:bg-green-950 dark:border-green-700 dark:text-green-300',
+        });
+        setTimeout(() => setShowConfetti(false), 3000); // Confetti lasts 3 seconds
+    };
+
+    window.addEventListener('start-tour', handleStartTour);
+    window.addEventListener('celebrate', handleCelebration);
+
     if (tourCompleted !== 'true') {
-        // slight delay to let page render
         setTimeout(() => setTourVisible(true), 500);
     }
 
-    return () => window.removeEventListener('start-tour', handleStartTour);
-  }, []);
+    return () => {
+        window.removeEventListener('start-tour', handleStartTour);
+        window.removeEventListener('celebrate', handleCelebration);
+    };
+  }, [toast]);
   
   if (isMobile) {
     return (
         <div className="space-y-6">
             <PushNotificationPrompt />
+            {isNewUser && <SetupChecklist />}
              <Card>
                 <CardHeader>
                     <CardTitle className="text-sm font-medium text-muted-foreground">Revenue Today</CardTitle>
@@ -146,6 +176,7 @@ export default function AdminView() {
 
   return (
     <>
+      <Confetti show={showConfetti} />
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
@@ -155,6 +186,7 @@ export default function AdminView() {
       <PushNotificationPrompt />
       {tourVisible && <ProductTour onComplete={() => setTourVisible(false)} />}
       <div className="space-y-8">
+        {isNewUser && <SetupChecklist />}
         <div id="dashboard-stats" className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

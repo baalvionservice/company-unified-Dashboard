@@ -26,6 +26,7 @@ import TrialBanner from './trial-banner';
 import RateLimitBanner from './rate-limit-banner';
 import OfflineBanner from './offline-banner';
 import { useState, useEffect } from 'react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
@@ -86,6 +87,45 @@ export function Header() {
   const searchParams = useSearchParams();
   const selectedBusiness = searchParams.get('businessId') || 'all';
 
+  const [showSearchTooltip, setShowSearchTooltip] = useState(false);
+  const [showBellTooltip, setShowBellTooltip] = useState(false);
+
+  useEffect(() => {
+    const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
+    if (isDemo) return;
+
+    const hasSeenSearch = localStorage.getItem('hasSeenSearchTooltip');
+    if (!hasSeenSearch) {
+        const timer = setTimeout(() => {
+            setShowSearchTooltip(true);
+            const hideTimer = setTimeout(() => {
+                setShowSearchTooltip(false);
+                localStorage.setItem('hasSeenSearchTooltip', 'true');
+            }, 5000);
+            return () => clearTimeout(hideTimer);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }
+  }, []);
+
+  useEffect(() => {
+      const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
+      if (isDemo) return;
+
+      const hasSeenBell = localStorage.getItem('hasSeenBellTooltip');
+      if (!hasSeenBell) {
+          const timer = setTimeout(() => {
+              setShowBellTooltip(true);
+              const hideTimer = setTimeout(() => {
+                  setShowBellTooltip(false);
+                  localStorage.setItem('hasSeenBellTooltip', 'true');
+              }, 5000);
+              return () => clearTimeout(hideTimer);
+          }, 2000); // Stagger the tooltips
+          return () => clearTimeout(timer);
+      }
+  }, []);
+
   const handleBusinessChange = (businessId: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (businessId === 'all') {
@@ -121,59 +161,75 @@ export function Header() {
                     ))}
                 </SelectContent>
                 </Select>
-                <div className="relative ml-auto flex flex-1 items-center gap-2 md:grow-0">
-                <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                    type="search"
-                    placeholder="Search..."
-                    className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-                    />
-                </div>
-                
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="relative h-9 w-9">
-                            <Bell className="h-5 w-5" />
-                            <span className="sr-only">Notifications</span>
-                            {unreadCount > 0 && (
-                                <div className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                                    {unreadCount}
+                <TooltipProvider>
+                    <div className="relative ml-auto flex flex-1 items-center gap-2 md:grow-0">
+                        <Tooltip open={showSearchTooltip}>
+                            <TooltipTrigger asChild>
+                                <div className="relative">
+                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                    type="search"
+                                    placeholder="Search..."
+                                    className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
+                                    />
                                 </div>
-                            )}
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-96">
-                        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <div className="flex flex-col gap-1">
-                            {latestNotifications.map((notification) => {
-                                const Icon = notificationIcons[notification.type];
-                                return (
-                                    <DropdownMenuItem key={notification.id} asChild>
-                                        <Link href="/notifications" className="flex items-start gap-3 !p-2">
-                                            <Icon className={cn("mt-1 h-4 w-4", notificationColors[notification.type])} />
-                                            <div className="flex-1 space-y-1">
-                                                <p className="text-sm font-medium">{notification.title}</p>
-                                                <p className="text-xs text-muted-foreground">{notification.description}</p>
-                                                <p className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}</p>
-                                            </div>
-                                            {!notification.isRead && <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                );
-                            })}
-                        </div>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                        <Link href="/notifications" className="w-full justify-center text-sm font-medium text-primary hover:text-primary/90">
-                            View all notifications
-                        </Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" align="start">
+                                <p>Search across all businesses, employees, and transactions</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        
+                        <DropdownMenu>
+                            <Tooltip open={showBellTooltip}>
+                                <TooltipTrigger asChild>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                                            <Bell className="h-5 w-5" />
+                                            <span className="sr-only">Notifications</span>
+                                            {unreadCount > 0 && (
+                                                <div className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                                                    {unreadCount}
+                                                </div>
+                                            )}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>We'll notify you here when something needs attention</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            <DropdownMenuContent align="end" className="w-96">
+                                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <div className="flex flex-col gap-1">
+                                    {latestNotifications.map((notification) => {
+                                        const Icon = notificationIcons[notification.type];
+                                        return (
+                                            <DropdownMenuItem key={notification.id} asChild>
+                                                <Link href="/notifications" className="flex items-start gap-3 !p-2">
+                                                    <Icon className={cn("mt-1 h-4 w-4", notificationColors[notification.type])} />
+                                                    <div className="flex-1 space-y-1">
+                                                        <p className="text-sm font-medium">{notification.title}</p>
+                                                        <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                                        <p className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}</p>
+                                                    </div>
+                                                    {!notification.isRead && <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>}
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        );
+                                    })}
+                                </div>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                <Link href="/notifications" className="w-full justify-center text-sm font-medium text-primary hover:text-primary/90">
+                                    View all notifications
+                                </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
-                </div>
+                    </div>
+                </TooltipProvider>
                 <UserNav />
             </div>
         </header>

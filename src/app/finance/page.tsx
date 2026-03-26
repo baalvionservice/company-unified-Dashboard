@@ -1,4 +1,5 @@
 
+'use client';
 import {
   Card,
   CardContent,
@@ -16,7 +17,7 @@ import {
   TableFooter,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, LinkIcon } from 'lucide-react';
 import NetWorthTrendChart from '@/components/charts/net-worth-trend-chart';
 import CostBreakdownChart from '@/components/charts/cost-breakdown-chart';
 import ProfitTrendChart from '@/components/charts/profit-trend-chart';
@@ -24,10 +25,43 @@ import financeData from '@/lib/data/finance-overview.json';
 import businessesData from '@/lib/data/businesses.json';
 import type { Business } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import EmptyState from '@/components/empty-state';
+import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 
 const allBusinesses: Business[] = businessesData;
 
 export default function FinanceOverviewPage() {
+  const [isNewUser, setIsNewUser] = useState(false);
+
+  useEffect(() => {
+    const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
+    const setupComplete = localStorage.getItem('setup_complete') === 'true';
+    if (!isDemo && !setupComplete) {
+      setIsNewUser(true);
+    }
+  }, []);
+
+  if (isNewUser) {
+    return (
+       <div className="space-y-8">
+            <div>
+                <h1 className="text-3xl font-bold tracking-tight">Finance Overview</h1>
+                <p className="text-muted-foreground">
+                    A comprehensive overview of your entire financial landscape.
+                </p>
+            </div>
+            <EmptyState
+                title="Connect a payment gateway"
+                description="Your financial dashboard is empty. Connect a payment provider like Stripe or PayPal to start tracking revenue, costs, and profit in real-time."
+                imageSeed="finance-chart"
+                imageHint="financial chart graph"
+                actionButton={<Button size="lg"><LinkIcon className="mr-2" /> Connect Gateway</Button>}
+            />
+        </div>
+    );
+  }
+
   const { netWorth, financialSummary } = financeData;
 
   const totals = financialSummary.reduce((acc, summary) => {

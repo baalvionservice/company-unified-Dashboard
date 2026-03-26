@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import {
@@ -40,10 +41,18 @@ export default function AddBusinessModal({ isOpen, onOpenChange }: AddBusinessMo
     e.preventDefault();
     onOpenChange(false);
     setStep(1); // Reset for next time
-    toast({
-      title: 'Business Created',
-      description: 'Your new business has been added to the platform.',
-    });
+    
+    // In a real app, you would check if this is the first business.
+    // For this demo, we'll assume it is if the user isn't in demo mode.
+    const isDemo = localStorage.getItem('baalvion_demo_mode') === 'true';
+    if (!isDemo) {
+        window.dispatchEvent(new CustomEvent('celebrate', { detail: { message: 'Your first business is live on Baalvion!' } }));
+    } else {
+        toast({
+            title: 'Business Created',
+            description: 'Your new business has been added to the platform.',
+        });
+    }
   };
 
   const progress = (step / 3) * 100;
