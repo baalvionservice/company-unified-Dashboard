@@ -1,30 +1,6 @@
-
-{
-    "permissions": [
-        "View Dashboard", "View Financials", "Edit Employees", "Export Data", "Manage Settings", 
-        "Approve Budgets", "Manage Tasks", "View Equity", "Generate Reports", "Manage Compliance", 
-        "View Audit Logs", "Edit Permissions", "Manage Billing", "Delete Business", "Onboard Employee"
-    ],
-    "roles": {
-        "Admin": {
-            "View Dashboard": true, "View Financials": true, "Edit Employees": true, "Export Data": true, "Manage Settings": true,
-            "Approve Budgets": true, "Manage Tasks": true, "View Equity": true, "Generate Reports": true, "Manage Compliance": true,
-            "View Audit Logs": true, "Edit Permissions": true, "Manage Billing": true, "Delete Business": true, "Onboard Employee": true
-        },
-        "Investor": {
-            "View Dashboard": "Limited", "View Financials": "Portfolio", "Edit Employees": false, "Export Data": "Reports only", "Manage Settings": false,
-            "Approve Budgets": false, "Manage Tasks": false, "View Equity": true, "Generate Reports": true, "Manage Compliance": false,
-            "View Audit Logs": false, "Edit Permissions": false, "Manage Billing": false, "Delete Business": false, "Onboard Employee": false
-        },
-        "Co-Founder": {
-            "View Dashboard": "Own only", "View Financials": "Shared", "Edit Employees": "Own team", "Export Data": "Limited", "Manage Settings": false,
-            "Approve Budgets": true, "Manage Tasks": true, "View Equity": true, "Generate Reports": true, "Manage Compliance": "Shared",
-            "View Audit Logs": true, "Edit Permissions": false, "Manage Billing": "Shared", "Delete Business": false, "Onboard Employee": true
-        },
-        "Employee": {
-            "View Dashboard": "Self only", "View Financials": false, "Edit Employees": false, "Export Data": false, "Manage Settings": false,
-            "Approve Budgets": false, "Manage Tasks": "Assigned only", "View Equity": false, "Generate Reports": false, "Manage Compliance": false,
-            "View Audit Logs": false, "Edit Permissions": false, "Manage Billing": false, "Delete Business": false, "Onboard Employee": false
-        }
-    }
-}
+{[
+  { "id": 1, "user_id": 101, "module": "FinancialEntries", "access": "Edit" },
+  { "id": 2, "user_id": 101, "module": "Dashboard", "access": "View" },
+  { "id": 3, "user_id": 102, "module": "ProfitDistributions", "access": "Admin" },
+  { "id": 4, "user_id": 103, "module": "Shareholders", "access": "View" }
+]
