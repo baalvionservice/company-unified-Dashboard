@@ -38,6 +38,7 @@ import {
   BookCopy,
   Link as LinkIcon,
   Landmark,
+  Puzzle,
 } from 'lucide-react';
 
 export const navItems = [
@@ -70,6 +71,7 @@ export const navItems = [
   { href: '/ai/simulator', icon: Scaling, label: 'Century Simulator' },
   { href: '/ai/strategy', icon: BrainCircuit, label: 'Strategic Planner' },
   { href: '/sync', icon: RefreshCw, label: 'Sync' },
+  { href: '/marketplace', icon: Puzzle, label: 'Marketplace' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
   { href: '/compliance/gdpr', icon: BookLock, label: 'GDPR' },
   { href: '/security/audit', icon: Shield, label: 'Audit Logs' },
