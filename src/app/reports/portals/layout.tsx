@@ -1,3 +1,4 @@
+
 import type { ReactNode } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Header } from '@/components/header';
