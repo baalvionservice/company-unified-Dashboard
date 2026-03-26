@@ -45,6 +45,11 @@ export default function OnboardingPage() {
     localStorage.setItem('onboardingStep', String(newStep));
   };
   
+  const startDemo = () => {
+    localStorage.setItem('baalvion_demo_mode', 'true');
+    router.push('/dashboard');
+  };
+
   const goToDashboard = () => {
     localStorage.removeItem('onboardingStep');
     localStorage.removeItem('onboardingData');
@@ -52,7 +57,7 @@ export default function OnboardingPage() {
   }
 
   const steps = [
-    { number: 1, title: "Welcome", component: <WelcomeStep onNext={nextStep} /> },
+    { number: 1, title: "Welcome", component: <WelcomeStep onSetup={nextStep} onDemo={startDemo} /> },
     { number: 2, title: "Business Setup", component: <BusinessSetupStep onNext={nextStep} onBack={prevStep} updateFormData={updateFormData} /> },
     { number: 3, title: "Invite Your Team", component: <InviteTeamStep onNext={nextStep} onBack={prevStep} /> },
     { number: 4, title: "Choose Your Plan", component: <PlanStep onNext={nextStep} onBack={prevStep} /> },

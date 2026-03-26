@@ -25,6 +25,7 @@ import businessesData from '@/lib/data/businesses.json';
 import TrialBanner from './trial-banner';
 import RateLimitBanner from './rate-limit-banner';
 import OfflineBanner from './offline-banner';
+import { useState, useEffect } from 'react';
 
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
@@ -40,6 +41,40 @@ const notificationColors: Record<NotificationType, string> = {
   System: 'text-blue-500',
   Team: 'text-purple-500',
 };
+
+function DemoBanner() {
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('baalvion_demo_mode') === 'true') {
+      setIsDemoMode(true);
+    }
+  }, []);
+
+  const handleExitDemo = () => {
+    localStorage.removeItem('baalvion_demo_mode');
+    router.push('/onboarding');
+  };
+
+  if (!isDemoMode) {
+    return null;
+  }
+
+  return (
+    <div className="flex w-full items-center justify-center gap-4 bg-orange-500 p-2 text-sm font-semibold text-white">
+      <span>DEMO MODE</span>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-6 border-orange-300 bg-orange-500 text-white hover:bg-orange-600 hover:text-white"
+        onClick={handleExitDemo}
+      >
+        Exit Demo & Start Setup
+      </Button>
+    </div>
+  );
+}
 
 
 export function Header() {
@@ -65,6 +100,7 @@ export function Header() {
 
   return (
     <div className="sticky top-0 z-30 flex flex-col items-stretch bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent">
+        <DemoBanner />
         <TrialBanner />
         <RateLimitBanner />
         <OfflineBanner />

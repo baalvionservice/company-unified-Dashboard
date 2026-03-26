@@ -1,5 +1,7 @@
 
+
 'use client';
+import * as React from 'react';
 import {
   ArrowUp,
   Briefcase,
@@ -41,6 +43,7 @@ import alertsData from '@/lib/data/alerts.json';
 import Link from 'next/link';
 import { PiggyBank } from 'lucide-react';
 import PushNotificationPrompt from '@/components/push-notification-prompt';
+import ProductTour from '@/components/product-tour';
 
 
 const businesses: Business[] = businessesData;
@@ -80,6 +83,23 @@ export default function AdminView() {
   const revenueToday = operationsData.snapshot.todaysRevenue;
   const recentAlerts = alertsData.slice(0, 3);
   const recentActivities = operationsData.activityFeed.slice(0, 5);
+  const [tourVisible, setTourVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleStartTour = () => {
+      localStorage.removeItem('baalvion_tour_completed');
+      setTourVisible(true);
+    };
+    window.addEventListener('start-tour', handleStartTour);
+
+    const tourCompleted = localStorage.getItem('baalvion_tour_completed');
+    if (tourCompleted !== 'true') {
+        // slight delay to let page render
+        setTimeout(() => setTourVisible(true), 500);
+    }
+
+    return () => window.removeEventListener('start-tour', handleStartTour);
+  }, []);
   
   if (isMobile) {
     return (
@@ -133,8 +153,9 @@ export default function AdminView() {
         </p>
       </div>
       <PushNotificationPrompt />
+      {tourVisible && <ProductTour onComplete={() => setTourVisible(false)} />}
       <div className="space-y-8">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div id="dashboard-stats" className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -212,7 +233,7 @@ export default function AdminView() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
             <OverallPerformanceChart />
-            <Card>
+            <Card id="business-table">
               <CardHeader>
                 <CardTitle>Business Overview</CardTitle>
                 <CardDescription>
@@ -267,7 +288,7 @@ export default function AdminView() {
                               {biz.status}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-right">
+                          <TableCell className="text-right" id="currency-display">
                             {biz.currency}{' '}
                             {(
                               biz.currentMetrics.revenue / 1_000_000
@@ -291,7 +312,7 @@ export default function AdminView() {
             </Card>
           </div>
 
-          <div className="grid auto-rows-max items-start gap-8">
+          <div id="ai-insights-card" className="grid auto-rows-max items-start gap-8">
             <RevenueByBusinessChart />
             <AiInsightsCard />
           </div>

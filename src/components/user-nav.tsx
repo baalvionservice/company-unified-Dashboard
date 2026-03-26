@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -18,7 +19,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CreditCard, LogOut, Settings, User, Users } from 'lucide-react';
+import { CreditCard, LogOut, Settings, User, Users, BookOpen } from 'lucide-react';
 import users from '@/lib/data/users.json';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Role } from '@/lib/types';
@@ -42,6 +43,11 @@ export function UserNav() {
     }
     router.push(`/dashboard?${params.toString()}`);
   };
+
+  const handleTour = () => {
+    localStorage.removeItem('baalvion_tour_completed');
+    window.dispatchEvent(new CustomEvent('start-tour'));
+  }
 
   return (
     <DropdownMenu>
@@ -91,28 +97,34 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <Users className="mr-2 h-4 w-4" />
-            <span>Switch Role</span>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup
-                value={currentRole}
-                onValueChange={handleRoleChange}
-              >
-                {roles.map((role) => (
-                  <DropdownMenuRadioItem key={role} value={role}>
-                    {role
-                      .charAt(0) +
-                      role.slice(1).toLowerCase().replace(/_/g, '-')}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
+        <DropdownMenuGroup>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Users className="mr-2 h-4 w-4" />
+              <span>Switch Role</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuRadioGroup
+                  value={currentRole}
+                  onValueChange={handleRoleChange}
+                >
+                  {roles.map((role) => (
+                    <DropdownMenuRadioItem key={role} value={role}>
+                      {role
+                        .charAt(0) +
+                        role.slice(1).toLowerCase().replace(/_/g, '-')}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+           <DropdownMenuItem onClick={handleTour}>
+            <BookOpen className="mr-2 h-4 w-4" />
+            <span>Take a Tour</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut className="mr-2 h-4 w-4" />

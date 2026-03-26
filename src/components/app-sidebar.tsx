@@ -1,6 +1,7 @@
 
 'use client';
 
+import * as React from "react";
 import {
   Briefcase,
   ChevronDown,
@@ -66,23 +67,31 @@ export function AppSidebar() {
   const userImage = PlaceHolderImages.find(
     (img) => img.id === currentUser.imageId
   );
+  const [isDemoMode, setIsDemoMode] = React.useState(false);
 
-  let businesses = allBusinesses;
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('baalvion_demo_mode') === 'true') {
+      setIsDemoMode(true);
+    }
+  }, []);
 
-  if (role === 'INVESTOR') {
-    // As per prompt: TechCorp India, RetailChain UAE, DigitalAgency SG
+  let businesses: Business[];
+
+  if (isDemoMode) {
+    businesses = allBusinesses;
+  } else if (role === 'INVESTOR') {
     const investorBusinessIds = ['biz_1', 'biz_3', 'biz_5'];
     businesses = allBusinesses.filter((b) => investorBusinessIds.includes(b.id));
   } else if (role === 'CO_FOUNDER') {
-    // As per prompt: TechCorp India, FinanceHub USA
     const coFounderBusinessIds = ['biz_1', 'biz_4'];
     businesses = allBusinesses.filter((b) =>
       coFounderBusinessIds.includes(b.id)
     );
   } else if (role === 'EMPLOYEE') {
-    // An employee belongs to one business. Let's say DigitalAgency SG for Li Wei.
     const employeeBusinessId = 'biz_5';
     businesses = allBusinesses.filter((b) => b.id === employeeBusinessId);
+  } else {
+    businesses = allBusinesses;
   }
 
   if (isMobile) {
