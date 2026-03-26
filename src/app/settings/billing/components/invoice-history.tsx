@@ -50,7 +50,7 @@ export default function InvoiceHistory() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoicesData.map((invoice) => (
+                {invoicesData.invoices.map((invoice) => (
                   <TableRow key={invoice.id}>
                     <TableCell className="font-medium">{invoice.id}</TableCell>
                     <TableCell>{invoice.period}</TableCell>
