@@ -45,7 +45,7 @@ import PushNotificationPrompt from '@/components/push-notification-prompt';
 import ProductTour from '@/components/product-tour';
 import Confetti from '@/components/confetti';
 import SetupChecklist from '@/components/setup-checklist';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 
 const businesses: Business[] = businessesData;
