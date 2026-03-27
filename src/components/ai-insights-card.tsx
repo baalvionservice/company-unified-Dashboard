@@ -1,8 +1,7 @@
+"use client";
 
-'use client';
-
-import { useState } from 'react';
-import { Bot, Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Bot, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -10,29 +9,29 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { getAiSummaryAction } from '@/app/dashboard/actions';
-import businesses from '@/lib/data/businesses.json';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { getAiSummaryAction } from "@/app/dashboard/actions";
+import businesses from "@/lib/data/businesses";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 export default function AiInsightsCard() {
   const [selectedBusiness, setSelectedBusiness] = useState(businesses[0].id);
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState('');
-  const [error, setError] = useState('');
+  const [summary, setSummary] = useState("");
+  const [error, setError] = useState("");
 
   const handleGenerateInsights = async () => {
     setLoading(true);
-    setError('');
-    setSummary('');
+    setError("");
+    setSummary("");
     const result = await getAiSummaryAction(selectedBusiness);
     if (result.summary) {
       setSummary(result.summary);
@@ -71,16 +70,14 @@ export default function AiInsightsCard() {
           <Alert>
             <Bot className="h-4 w-4" />
             <AlertTitle>Analysis Complete</AlertTitle>
-            <AlertDescription className="text-sm">
-                {summary}
-            </AlertDescription>
+            <AlertDescription className="text-sm">{summary}</AlertDescription>
           </Alert>
         )}
         {error && (
-            <Alert variant="destructive">
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-            </Alert>
+          <Alert variant="destructive">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
       </CardContent>
       <CardFooter>
@@ -94,7 +91,7 @@ export default function AiInsightsCard() {
           ) : (
             <Bot className="mr-2 h-4 w-4" />
           )}
-          {loading ? 'Analyzing...' : 'Generate Insights'}
+          {loading ? "Analyzing..." : "Generate Insights"}
         </Button>
       </CardFooter>
     </Card>

@@ -1,14 +1,13 @@
+"use client";
 
-'use client';
-
-import { Line, LineChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -16,13 +15,15 @@ import {
   ChartLegend,
   ChartLegendContent,
   type ChartConfig,
-} from '@/components/ui/chart';
+} from "@/components/ui/chart";
 
-import businessesData from '@/lib/data/businesses.json';
-import fxRates from '@/lib/data/fx-rates.json';
+import businessesData from "@/lib/data/businesses";
+import fxRates from "@/lib/data/fx-rates.json";
 
 const allMonths = Array.from(
-  new Set(businessesData.flatMap((biz) => biz.revenueHistory.map((h) => h.month)))
+  new Set(
+    businessesData.flatMap((biz) => biz.revenueHistory.map((h) => h.month))
+  )
 );
 
 const chartData = allMonths.map((month) => {
@@ -48,12 +49,12 @@ const chartData = allMonths.map((month) => {
 
 const chartConfig = {
   revenue: {
-    label: 'Revenue',
-    color: 'hsl(var(--chart-1))',
+    label: "Revenue",
+    color: "hsl(var(--chart-1))",
   },
   profit: {
-    label: 'Profit',
-    color: 'hsl(var(--chart-2))',
+    label: "Profit",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
@@ -62,7 +63,9 @@ export default function OverallPerformanceChart() {
     <Card>
       <CardHeader>
         <CardTitle>Overall Performance</CardTitle>
-        <CardDescription>Total revenue vs. profit over the last 6 months (USD M)</CardDescription>
+        <CardDescription>
+          Total revenue vs. profit over the last 6 months (USD M)
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
@@ -82,10 +85,10 @@ export default function OverallPerformanceChart() {
               tickMargin={8}
             />
             <YAxis
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value) => `$${value}M`}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => `$${value}M`}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />

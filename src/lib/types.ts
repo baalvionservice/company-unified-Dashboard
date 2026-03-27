@@ -1,4 +1,3 @@
-
 export type Role = "ADMIN" | "INVESTOR" | "CO_FOUNDER" | "EMPLOYEE";
 export type Currency = "USD" | "INR" | "GBP" | "AED" | "SGD";
 export type BusinessStatus = "Active" | "Growth" | "Review";
@@ -31,33 +30,33 @@ export interface User {
 }
 
 export interface Employee {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-    department: string;
-    businessId: string;
-    country: string;
-    status: string;
-    employmentType: string;
-    joinDate: string;
-    salary: number;
-    manager: string | null;
-    directReports: string[];
-    performance: {
-        score: number;
-        tasksCompleted: number;
-        attendance: number;
-    };
-    imageId: string;
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  businessId: string;
+  country: string;
+  status: string;
+  employmentType: string;
+  joinDate: string;
+  salary: number;
+  manager: string | null;
+  directReports: string[];
+  performance: {
+    score: number;
+    tasksCompleted: number;
+    attendance: number;
+  };
+  imageId: string;
 }
 
 export interface FxRate {
   [key: string]: number;
 }
 
-export type PaymentGateway = 'Stripe' | 'Razorpay' | 'PayPal';
-export type TransactionStatus = 'Success' | 'Failed' | 'Pending';
+export type PaymentGateway = "Stripe" | "Razorpay" | "PayPal";
+export type TransactionStatus = "Success" | "Failed" | "Pending";
 
 export interface Transaction {
   id: string;
@@ -74,7 +73,7 @@ export interface Transaction {
   date: string;
 }
 
-export type KpiPeriod = 'Day' | 'Week' | 'Month' | 'Quarter' | 'Year';
+export type KpiPeriod = "Day" | "Week" | "Month" | "Quarter" | "Year";
 
 export interface KpiData {
   businessId: string;
@@ -84,7 +83,7 @@ export interface KpiData {
   };
   profitMargin: {
     value: number;
-    trend: 'up' | 'down' | 'flat';
+    trend: "up" | "down" | "flat";
   };
   customers: {
     total: number;
@@ -98,7 +97,7 @@ export interface AllKpis {
   [key: string]: KpiData[];
 }
 
-export type NotificationType = 'Alert' | 'System' | 'Finance' | 'Team';
+export type NotificationType = "Alert" | "System" | "Finance" | "Team";
 
 export interface Notification {
   id: string;
@@ -142,20 +141,20 @@ export interface EquityData {
 }
 
 export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  assigneeId: string;
+  businessId: string;
+  priority: "High" | "Medium" | "Low";
+  dueDate: string;
+  comments: {
     id: string;
-    title: string;
-    description: string;
-    status: string;
-    assigneeId: string;
-    businessId: string;
-    priority: 'High' | 'Medium' | 'Low';
-    dueDate: string;
-    comments: {
-        id: string;
-        authorId: string;
-        text: string;
-        timestamp: string;
-    }[];
+    authorId: string;
+    text: string;
+    timestamp: string;
+  }[];
 }
 
 export interface ComplianceRecord {
@@ -164,7 +163,7 @@ export interface ComplianceRecord {
   business: string;
   flag: string;
   taxStatus: string;
-  taxStatusCode: 'ok' | 'warning';
+  taxStatusCode: "ok" | "warning";
   vatGst: string;
   licenses: string;
   dataLaws: string;
@@ -179,4 +178,50 @@ export interface Invoice {
   amount: number;
   status: string;
   paymentDate: string;
+}
+
+export type Severity = "Critical" | "Warning" | "Info";
+export type Status = "Success" | "Failed";
+export type Action =
+  | "LOGIN"
+  | "LOGOUT"
+  | "VIEW"
+  | "CREATE"
+  | "UPDATE"
+  | "DELETE"
+  | "EXPORT"
+  | "PERMISSION_CHANGE"
+  | "FAILED_LOGIN";
+
+export interface AuditLog {
+  id: number;
+  timestamp: string;
+  action: string;
+  entity_type: string;
+  entity_id: number;
+  user_id: number | string;
+  user: string;
+  role?: string;
+  resource: string;
+  ipAddress: string;
+  location: string;
+  status: Status;
+  severity: Severity;
+  details: Record<string, any>;
+}
+
+export interface PermissionRole {
+  [key: string]: boolean;
+}
+
+export interface PermissionsData {
+  roles: {
+    [roleName: string]: PermissionRole;
+  };
+  permissions: Array<{
+    id: number;
+    user_id: number;
+    module: string;
+    access: string;
+  }>;
 }

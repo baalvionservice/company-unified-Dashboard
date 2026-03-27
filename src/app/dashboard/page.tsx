@@ -1,22 +1,23 @@
-import type { Role } from '@/lib/types';
-import AdminView from './admin-view';
-import InvestorView from './investor-view';
-import CoFounderView from './co-founder-view';
-import EmployeeView from './employee-view';
+import type { Role } from "@/lib/types";
+import AdminView from "./admin-view";
+import InvestorView from "./investor-view";
+import CoFounderView from "./co-founder-view";
+import EmployeeView from "./employee-view";
 
-export default function DashboardPage({
+export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams?: { role?: Role };
+  searchParams?: Promise<{ role?: Role }>;
 }) {
-  const role = searchParams?.role;
+  const params = await searchParams;
+  const role = params?.role;
 
   switch (role) {
-    case 'INVESTOR':
+    case "INVESTOR":
       return <InvestorView />;
-    case 'CO_FOUNDER':
+    case "CO_FOUNDER":
       return <CoFounderView />;
-    case 'EMPLOYEE':
+    case "EMPLOYEE":
       return <EmployeeView />;
     default:
       return <AdminView />;

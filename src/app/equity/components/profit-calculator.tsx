@@ -1,7 +1,6 @@
+"use client";
 
-'use client';
-
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,17 +8,17 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -27,22 +26,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { DollarSign } from 'lucide-react';
-import businessesData from '@/lib/data/businesses.json';
-import equityData from '@/lib/data/equity.json';
-import type { EquityData } from '@/lib/types';
+} from "@/components/ui/table";
+import { DollarSign } from "lucide-react";
+import businessesData from "@/lib/data/businesses";
+import equityData from "@/lib/data/equity.json";
+import type { EquityData } from "@/lib/types";
 
 const allEquityData: EquityData[] = equityData;
 
 export default function ProfitCalculator() {
-  const [selectedBusinessId, setSelectedBusinessId] = useState(allEquityData[0].businessId);
+  const [selectedBusinessId, setSelectedBusinessId] = useState(
+    allEquityData[0].businessId
+  );
   const [profitAmount, setProfitAmount] = useState<number | string>(1000000);
 
-  const selectedBusiness = allEquityData.find(b => b.businessId === selectedBusinessId);
-  const businessDetails = businessesData.find(b => b.id === selectedBusinessId);
+  const selectedBusiness = allEquityData.find(
+    (b) => b.businessId === selectedBusinessId
+  );
+  const businessDetails = businessesData.find(
+    (b) => b.id === selectedBusinessId
+  );
 
-  const distributions = selectedBusiness?.stakeholders.map(s => ({
+  const distributions = selectedBusiness?.stakeholders.map((s) => ({
     name: s.name,
     equity: s.equity,
     payout: (Number(profitAmount) || 0) * (s.equity / 100),
@@ -59,12 +64,15 @@ export default function ProfitCalculator() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Label>Business</Label>
-          <Select value={selectedBusinessId} onValueChange={setSelectedBusinessId}>
+          <Select
+            value={selectedBusinessId}
+            onValueChange={setSelectedBusinessId}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select a business" />
             </SelectTrigger>
             <SelectContent>
-              {businessesData.map(biz => (
+              {businessesData.map((biz) => (
                 <SelectItem key={biz.id} value={biz.id}>
                   {biz.name}
                 </SelectItem>
@@ -73,7 +81,9 @@ export default function ProfitCalculator() {
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="profit-amount">Monthly Profit ({businessDetails?.currency})</Label>
+          <Label htmlFor="profit-amount">
+            Monthly Profit ({businessDetails?.currency})
+          </Label>
           <div className="relative">
             <DollarSign className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -81,7 +91,7 @@ export default function ProfitCalculator() {
               type="number"
               className="pl-8"
               value={profitAmount}
-              onChange={(e) => setProfitAmount(Number(e.target.value) || '')}
+              onChange={(e) => setProfitAmount(Number(e.target.value) || "")}
               placeholder="Enter profit amount"
             />
           </div>
@@ -99,11 +109,14 @@ export default function ProfitCalculator() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {distributions.map(d => (
+                {distributions.map((d) => (
                   <TableRow key={d.name}>
                     <TableCell className="font-medium">{d.name}</TableCell>
                     <TableCell className="text-right font-mono">
-                      {businessDetails?.currency} {d.payout.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                      {businessDetails?.currency}{" "}
+                      {d.payout.toLocaleString(undefined, {
+                        maximumFractionDigits: 0,
+                      })}
                     </TableCell>
                   </TableRow>
                 ))}

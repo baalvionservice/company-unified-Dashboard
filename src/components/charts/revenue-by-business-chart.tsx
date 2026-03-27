@@ -1,37 +1,38 @@
+"use client";
 
-'use client';
-
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from '@/components/ui/chart';
+} from "@/components/ui/chart";
 
-import businessesData from '@/lib/data/businesses.json';
-import fxRates from '@/lib/data/fx-rates.json';
+import businessesData from "@/lib/data/businesses";
+import fxRates from "@/lib/data/fx-rates.json";
 
 const chartData = businessesData.map((biz) => ({
   business: biz.name
-    .split(' ')
+    .split(" ")
     .map((word) => word[0])
-    .join(''),
-  revenue: Math.round(biz.currentMetrics.revenue / (fxRates[biz.currency] || 1) / 1000000),
+    .join(""),
+  revenue: Math.round(
+    biz.currentMetrics.revenue / (fxRates[biz.currency] || 1) / 1000000
+  ),
   fill: `hsl(var(--chart-${(businessesData.indexOf(biz) % 5) + 1}))`,
 }));
 
 const chartConfig = {
   revenue: {
-    label: 'Revenue (USD M)',
-    color: 'hsl(var(--chart-1))',
+    label: "Revenue (USD M)",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
@@ -53,9 +54,9 @@ export default function RevenueByBusinessChart() {
               axisLine={false}
             />
             <YAxis
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `$${value}M`}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => `$${value}M`}
             />
             <ChartTooltip
               cursor={false}

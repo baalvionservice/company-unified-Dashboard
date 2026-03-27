@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -8,16 +8,11 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertTriangle,
   DollarSign,
@@ -28,13 +23,13 @@ import {
   Mail,
   Smartphone,
   Trash2,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
-import allNotificationsData from '@/lib/data/notifications.json';
-import type { Notification, NotificationType } from '@/lib/types';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
+import allNotificationsData from "@/lib/data/notifications.json";
+import type { Notification, NotificationType } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 const notificationIcons: Record<NotificationType, React.ElementType> = {
   Alert: AlertTriangle,
@@ -44,61 +39,65 @@ const notificationIcons: Record<NotificationType, React.ElementType> = {
 };
 
 const notificationColors: Record<NotificationType, string> = {
-  Alert: 'text-red-500 bg-red-100 dark:bg-red-950',
-  Finance: 'text-green-500 bg-green-100 dark:bg-green-950',
-  System: 'text-blue-500 bg-blue-100 dark:bg-blue-950',
-  Team: 'text-purple-500 bg-purple-100 dark:bg-purple-950',
+  Alert: "text-red-500 bg-red-100 dark:bg-red-950",
+  Finance: "text-green-500 bg-green-100 dark:bg-green-950",
+  System: "text-blue-500 bg-blue-100 dark:bg-blue-950",
+  Team: "text-purple-500 bg-purple-100 dark:bg-purple-950",
 };
 
-type FilterType = 'All' | 'Unread' | NotificationType;
+type FilterType = "All" | "Unread" | NotificationType;
 
 export default function NotificationsPage() {
-  const [activeTab, setActiveTab] = useState<FilterType>('All');
-  const [notifications, setNotifications] =
-    useState<Notification[]>(allNotificationsData);
+  const [activeTab, setActiveTab] = useState<FilterType>("All");
+  const [notifications, setNotifications] = useState<Notification[]>(
+    allNotificationsData.map((n) => ({
+      ...n,
+      type: n.type as NotificationType,
+    }))
+  );
   const { toast } = useToast();
 
   const handleDismiss = (notificationId: string) => {
     setNotifications(notifications.filter((n) => n.id !== notificationId));
     toast({
-      title: 'Notification Dismissed',
+      title: "Notification Dismissed",
     });
   };
 
   const getCount = (filter: FilterType) => {
-    if (filter === 'All') return notifications.length;
-    if (filter === 'Unread')
+    if (filter === "All") return notifications.length;
+    if (filter === "Unread")
       return notifications.filter((n) => !n.isRead).length;
     return notifications.filter((n) => n.type === filter).length;
   };
 
-  const unreadCount = getCount('Unread');
+  const unreadCount = getCount("Unread");
 
   const handleMarkAllAsRead = () => {
     setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
     toast({
-      title: 'All notifications marked as read',
-      description: 'Your notification inbox is clear.',
+      title: "All notifications marked as read",
+      description: "Your notification inbox is clear.",
     });
   };
 
   const filteredNotifications = useMemo(() => {
-    if (activeTab === 'Unread') {
+    if (activeTab === "Unread") {
       return notifications.filter((n) => !n.isRead);
     }
-    if (activeTab !== 'All') {
+    if (activeTab !== "All") {
       return notifications.filter((n) => n.type === activeTab);
     }
     return notifications;
   }, [activeTab, notifications]);
 
   const tabs: FilterType[] = [
-    'All',
-    'Unread',
-    'Alert',
-    'System',
-    'Finance',
-    'Team',
+    "All",
+    "Unread",
+    "Alert",
+    "System",
+    "Finance",
+    "Team",
   ];
 
   return (
@@ -120,7 +119,7 @@ export default function NotificationsPage() {
               <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
                 {tabs.map((tab) => (
                   <TabsTrigger key={tab} value={tab}>
-                    {tab}{' '}
+                    {tab}{" "}
                     <Badge variant="secondary" className="ml-2">
                       {getCount(tab)}
                     </Badge>
@@ -146,13 +145,13 @@ export default function NotificationsPage() {
                 <div
                   key={notification.id}
                   className={cn(
-                    'flex items-start gap-4 rounded-lg border p-4 group',
-                    !notification.isRead && 'bg-blue-50/50 dark:bg-blue-950/20'
+                    "flex items-start gap-4 rounded-lg border p-4 group",
+                    !notification.isRead && "bg-blue-50/50 dark:bg-blue-950/20"
                   )}
                 >
                   <div
                     className={cn(
-                      'mt-1 flex h-8 w-8 items-center justify-center rounded-full',
+                      "mt-1 flex h-8 w-8 items-center justify-center rounded-full",
                       notificationColors[notification.type]
                     )}
                   >
@@ -175,9 +174,14 @@ export default function NotificationsPage() {
                       title="Unread"
                     />
                   )}
-                   <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 sm:opacity-100" onClick={() => handleDismiss(notification.id)}>
-                      <Trash2 className="h-4 w-4" />
-                   </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 sm:opacity-100"
+                    onClick={() => handleDismiss(notification.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               );
             })

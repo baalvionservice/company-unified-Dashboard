@@ -1,14 +1,20 @@
+"use client";
 
-'use client';
-
-import { Area, Line, ComposedChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import {
+  Area,
+  Line,
+  ComposedChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -16,35 +22,37 @@ import {
   ChartLegend,
   ChartLegendContent,
   type ChartConfig,
-} from '@/components/ui/chart';
+} from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import forecastData from '@/lib/data/forecast.json';
-import businesses from '@/lib/data/businesses.json';
+} from "@/components/ui/select";
+import forecastData from "@/lib/data/forecast.json";
+import businesses from "@/lib/data/businesses";
 
 const chartData = [
-    ...forecastData.revenueForecast.historical,
-    ...forecastData.revenueForecast.forecast.slice(1)
-].map(d => ({ ...d, forecast: [d.low, d.high] }));
-
+  ...forecastData.revenueForecast.historical,
+  ...forecastData.revenueForecast.forecast.slice(1),
+].map((d) => ({
+  ...d,
+  forecast: "low" in d && "high" in d ? [d.low, d.high] : undefined,
+}));
 
 const chartConfig = {
   revenue: {
-    label: 'Historical Revenue',
-    color: 'hsl(var(--chart-1))',
+    label: "Historical Revenue",
+    color: "hsl(var(--chart-1))",
   },
   base: {
-    label: 'Forecast',
-    color: 'hsl(var(--chart-1))',
+    label: "Forecast",
+    color: "hsl(var(--chart-1))",
   },
   forecast: {
-    label: 'Confidence Interval',
-    color: 'hsl(var(--chart-1))',
+    label: "Confidence Interval",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
@@ -72,12 +80,14 @@ export default function RevenueForecastChart() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <ComposedChart
-            data={chartData}
-            margin={{ left: 12, right: 12 }}
-          >
+          <ComposedChart data={chartData} margin={{ left: 12, right: 12 }}>
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
             <YAxis
               tickFormatter={(value) => `$${value}M`}
               tickLine={false}
@@ -101,7 +111,7 @@ export default function RevenueForecastChart() {
               strokeWidth={2}
               dot={true}
             />
-             <Line
+            <Line
               dataKey="base"
               type="monotone"
               stroke="var(--color-base)"

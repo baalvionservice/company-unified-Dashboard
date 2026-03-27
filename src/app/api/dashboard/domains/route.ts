@@ -1,11 +1,10 @@
-
-import { NextResponse } from 'next/server';
-import businesses from '@/lib/data/businesses.json';
-import { Business } from '@/lib/types';
+import { NextResponse } from "next/server";
+import businesses from "@/lib/data/businesses";
+import { Business } from "@/lib/types";
 
 export async function GET() {
   try {
-    const domainFinancials = (businesses as Business[]).map(domain => {
+    const domainFinancials = (businesses as Business[]).map((domain) => {
       const revenue = domain.currentMetrics.revenue;
       const profit = domain.currentMetrics.profit;
       const expenses = revenue - profit;
@@ -15,15 +14,17 @@ export async function GET() {
         name: domain.name,
         revenue,
         expenses,
-        profit
+        profit,
       };
     });
 
     return NextResponse.json({
-      domains: domainFinancials
+      domains: domainFinancials,
     });
-
   } catch (error) {
-    return NextResponse.json({ message: 'Error processing request' }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error processing request" },
+      { status: 500 }
+    );
   }
 }

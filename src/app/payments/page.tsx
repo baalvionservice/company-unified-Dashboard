@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, use } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,15 +17,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   DollarSign,
   CheckCircle2,
@@ -34,22 +34,29 @@ import {
   MoreHorizontal,
   ArrowLeft,
   ArrowRight,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import type {
   Transaction,
   PaymentGateway,
   TransactionStatus,
   Business,
-} from '@/lib/types';
-import transactionsData from '@/lib/data/transactions.json';
-import businessesData from '@/lib/data/businesses.json';
-import { FilterBar } from './components/filter-bar';
-import { parse, isWithinInterval, startOfDay, endOfDay, format } from 'date-fns';
-import RevenueByGatewayDonutChart from '@/components/charts/revenue-by-gateway-donut-chart';
-import MonthlyRevenueByGatewayChart from '@/components/charts/monthly-revenue-by-gateway-chart';
-import GatewayPerformanceTable from '@/components/gateway-performance-table';
-import TransactionDetail from './components/transaction-detail';
+  Currency,
+} from "@/lib/types";
+import transactionsData from "@/lib/data/transactions.json";
+import businessesData from "@/lib/data/businesses";
+import { FilterBar } from "./components/filter-bar";
+import {
+  parse,
+  isWithinInterval,
+  startOfDay,
+  endOfDay,
+  format,
+} from "date-fns";
+import RevenueByGatewayDonutChart from "@/components/charts/revenue-by-gateway-donut-chart";
+import MonthlyRevenueByGatewayChart from "@/components/charts/monthly-revenue-by-gateway-chart";
+import GatewayPerformanceTable from "@/components/gateway-performance-table";
+import TransactionDetail from "./components/transaction-detail";
 
 type TransactionWithBusiness = Transaction & { businessName: string };
 
@@ -59,11 +66,11 @@ const businesses: Business[] = businessesData;
 
 const gatewayColors: Record<PaymentGateway, string> = {
   Stripe:
-    'border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300',
+    "border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-700 dark:bg-blue-950 dark:text-blue-300",
   Razorpay:
-    'border-orange-300 bg-orange-100 text-orange-800 dark:border-orange-700 dark:bg-orange-950 dark:text-orange-300',
+    "border-orange-300 bg-orange-100 text-orange-800 dark:border-orange-700 dark:bg-orange-950 dark:text-orange-300",
   PayPal:
-    'border-sky-300 bg-sky-100 text-sky-800 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-300',
+    "border-sky-300 bg-sky-100 text-sky-800 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-300",
 };
 
 const statusConfig: Record<
@@ -73,69 +80,77 @@ const statusConfig: Record<
   Success: {
     icon: CheckCircle2,
     color:
-      'border-green-300 bg-green-100 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-300',
+      "border-green-300 bg-green-100 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-300",
   },
   Failed: {
     icon: XCircle,
     color:
-      'border-red-300 bg-red-100 text-red-800 dark:border-red-700 dark:bg-red-950 dark:text-red-300',
+      "border-red-300 bg-red-100 text-red-800 dark:border-red-700 dark:bg-red-950 dark:text-red-300",
   },
   Pending: {
     icon: Clock,
     color:
-      'border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-700 dark:bg-yellow-950 dark:text-yellow-300',
+      "border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
   },
 };
 
 export default function PaymentsPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     gateway?: string;
     status?: string;
     businessId?: string;
     from?: string;
     to?: string;
     page?: string;
-  };
+  }>;
 }) {
   const [selectedTransaction, setSelectedTransaction] =
     useState<TransactionWithBusiness | null>(null);
 
+  const params = searchParams ? use(searchParams) : undefined;
+
   const allTransactions: TransactionWithBusiness[] = transactionsData.map(
-    (tx: Transaction) => {
+    (tx: any) => {
       const business = businesses.find((b) => b.id === tx.businessId);
-      return { ...tx, businessName: business?.name || 'N/A' };
+      return {
+        ...tx,
+        gateway: tx.gateway as PaymentGateway,
+        currency: tx.currency as Currency,
+        status: tx.status as TransactionStatus,
+        businessName: business?.name || "N/A",
+      };
     }
   );
 
   // Calculate stats from all transactions
   const totalCollected = allTransactions
-    .filter((tx) => tx.status === 'Success')
+    .filter((tx) => tx.status === "Success")
     .reduce((sum, tx) => sum + tx.amount, 0);
 
   const successfulTransactions = allTransactions.filter(
-    (tx) => tx.status === 'Success'
+    (tx) => tx.status === "Success"
   ).length;
   const failedTransactions = allTransactions.filter(
-    (tx) => tx.status === 'Failed'
+    (tx) => tx.status === "Failed"
   ).length;
   const pendingPayouts = allTransactions
-    .filter((tx) => tx.status === 'Pending')
+    .filter((tx) => tx.status === "Pending")
     .reduce((sum, tx) => sum + tx.amount, 0);
 
   // Filtering logic
-  const currentPage = Number(searchParams?.page || '1');
-  const gateway = searchParams?.gateway;
-  const status = searchParams?.status;
-  const businessId = searchParams?.businessId;
-  const from = searchParams?.from;
-  const to = searchParams?.to;
+  const currentPage = Number(params?.page || "1");
+  const gateway = params?.gateway;
+  const status = params?.status;
+  const businessId = params?.businessId;
+  const from = params?.from;
+  const to = params?.to;
 
   const filteredTransactions = allTransactions.filter((tx) => {
-    if (gateway && gateway !== 'all' && tx.gateway !== gateway) return false;
-    if (status && status !== 'all' && tx.status !== status) return false;
-    if (businessId && businessId !== 'all' && tx.businessId !== businessId)
+    if (gateway && gateway !== "all" && tx.gateway !== gateway) return false;
+    if (status && status !== "all" && tx.status !== status) return false;
+    if (businessId && businessId !== "all" && tx.businessId !== businessId)
       return false;
     if (from && to) {
       const txDate = new Date(tx.date);
@@ -285,7 +300,7 @@ export default function PaymentsPage({
                         <Badge
                           variant="outline"
                           className={cn(
-                            'flex items-center gap-2',
+                            "flex items-center gap-2",
                             statusConfig[tx.status].color
                           )}
                         >
@@ -293,7 +308,7 @@ export default function PaymentsPage({
                           <span>{tx.status}</span>
                         </Badge>
                       </TableCell>
-                      <TableCell>{format(new Date(tx.date), 'PPpp')}</TableCell>
+                      <TableCell>{format(new Date(tx.date), "PPpp")}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -326,20 +341,16 @@ export default function PaymentsPage({
         </CardContent>
         <CardFooter className="flex items-center justify-between">
           <div className="text-xs text-muted-foreground">
-            Showing{' '}
+            Showing{" "}
             <strong>
               {(currentPage - 1) * PAGE_SIZE + 1}-
               {Math.min(currentPage * PAGE_SIZE, totalTransactions)}
-            </strong>{' '}
+            </strong>{" "}
             of <strong>{totalTransactions}</strong> transactions
           </div>
           <div className="flex items-center gap-2">
             <Link href={`?page=${Math.max(1, currentPage - 1)}`} passHref>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={currentPage <= 1}
-              >
+              <Button variant="outline" size="sm" disabled={currentPage <= 1}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Previous
               </Button>

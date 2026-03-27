@@ -1,24 +1,30 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import KpiCard from './components/kpi-card';
-import KpiTable from './components/kpi-table';
-import KpiAlerts from './components/kpi-alerts';
-import kpiData from '@/lib/data/kpis.json';
-import type { KpiPeriod, AllKpis } from '@/lib/types';
-import { Target } from 'lucide-react';
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import KpiCard from "./components/kpi-card";
+import KpiTable from "./components/kpi-table";
+import KpiAlerts from "./components/kpi-alerts";
+import kpiData from "@/lib/data/kpis.json";
+import type { KpiPeriod, AllKpis, KpiData } from "@/lib/types";
+import { Target } from "lucide-react";
 
-const allKpis: AllKpis = kpiData;
-const periods: KpiPeriod[] = ['Day', 'Week', 'Month', 'Quarter', 'Year'];
+const allKpis: AllKpis = Object.fromEntries(
+  Object.entries(kpiData).map(([period, data]) => [
+    period,
+    (data as any[]).map((item: any) => ({
+      ...item,
+      profitMargin: {
+        ...item.profitMargin,
+        trend: item.profitMargin.trend as "up" | "down" | "flat",
+      },
+    })),
+  ])
+) as AllKpis;
+const periods: KpiPeriod[] = ["Day", "Week", "Month", "Quarter", "Year"];
 
 export default function KpiTrackerPage() {
-  const [period, setPeriod] = useState<KpiPeriod>('Month');
+  const [period, setPeriod] = useState<KpiPeriod>("Month");
 
   const handlePeriodChange = (value: string) => {
     setPeriod(value as KpiPeriod);
@@ -49,16 +55,15 @@ export default function KpiTrackerPage() {
               ))}
             </div>
             <div className="mt-8">
-                <KpiTable kpiData={allKpis[p]} />
+              <KpiTable kpiData={allKpis[p]} />
             </div>
           </TabsContent>
         ))}
       </Tabs>
-      
+
       <div className="mt-8">
         <KpiAlerts />
       </div>
-
     </div>
   );
 }

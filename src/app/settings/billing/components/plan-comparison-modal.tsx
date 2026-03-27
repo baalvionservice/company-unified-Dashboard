@@ -135,6 +135,7 @@ export default function PlanComparisonModal({ isOpen, onOpenChange, currentPlan 
                 <AlertDialogAction onClick={handleConfirmChange}>Confirm Change</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
+    </AlertDialog>
     </>
   );
 }

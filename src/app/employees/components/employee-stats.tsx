@@ -1,25 +1,21 @@
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Users, UserCheck, Globe, Briefcase } from 'lucide-react';
-import employeesData from '@/lib/data/employees.json';
-import businessesData from '@/lib/data/businesses.json';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, UserCheck, Globe, Briefcase } from "lucide-react";
+import employeesData from "@/lib/data/employees.json";
+import businessesData from "@/lib/data/businesses";
 
 export default function EmployeeStats() {
   const totalEmployees = employeesData.length;
-  const activeNow = employeesData.filter(e => e.status === 'Active' || e.status === 'Remote').length;
-  const countryCount = new Set(employeesData.map(e => e.country)).size;
+  const activeNow = employeesData.filter(
+    (e) => e.status === "Active" || e.status === "Remote"
+  ).length;
+  const countryCount = new Set(employeesData.map((e) => e.country)).size;
   const openPositions = 8; // Mock data
 
   const stats = [
-    { title: 'Total Employees', value: totalEmployees, icon: Users },
-    { title: 'Active Now', value: activeNow, icon: UserCheck },
-    { title: 'Countries', value: countryCount, icon: Globe },
-    { title: 'Open Positions', value: openPositions, icon: Briefcase },
+    { title: "Total Employees", value: totalEmployees, icon: Users },
+    { title: "Active Now", value: activeNow, icon: UserCheck },
+    { title: "Countries", value: countryCount, icon: Globe },
+    { title: "Open Positions", value: openPositions, icon: Briefcase },
   ];
 
   return (

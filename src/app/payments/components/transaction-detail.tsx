@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Sheet,
@@ -6,29 +6,17 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from '@/components/ui/sheet';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import type { Transaction, Business } from '@/lib/types';
-import businesses from '@/lib/data/businesses.json';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { cn } from '@/lib/utils';
-import {
-  FileCheck,
-  FileClock,
-  FileX,
-  Mail,
-  User,
-  Globe,
-} from 'lucide-react';
-import { format } from 'date-fns';
+} from "@/components/ui/sheet";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import type { Transaction, Business } from "@/lib/types";
+import businesses from "@/lib/data/businesses";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { cn } from "@/lib/utils";
+import { FileCheck, FileClock, FileX, Mail, User, Globe } from "lucide-react";
+import { format } from "date-fns";
 
 type TransactionWithBusiness = Transaction & { businessName: string };
 
@@ -51,37 +39,34 @@ export default function TransactionDetail({
   const businessImage = PlaceHolderImages.find(
     (p) => p.id === business.imageId
   );
-  
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Transaction Details</SheetTitle>
-          <SheetDescription>
-            ID: {transaction.id}
-          </SheetDescription>
+          <SheetDescription>ID: {transaction.id}</SheetDescription>
         </SheetHeader>
         <div className="mt-6 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-xl">
-                {transaction.currency}{' '}
-                {transaction.amount.toLocaleString()}
+                {transaction.currency} {transaction.amount.toLocaleString()}
               </CardTitle>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Badge
                   variant="outline"
                   className={cn(
-                    transaction.status === 'Success'
-                      ? 'text-green-600 border-green-300'
-                      : transaction.status === 'Failed'
-                      ? 'text-red-600 border-red-300'
-                      : 'text-yellow-600 border-yellow-300'
+                    transaction.status === "Success"
+                      ? "text-green-600 border-green-300"
+                      : transaction.status === "Failed"
+                      ? "text-red-600 border-red-300"
+                      : "text-yellow-600 border-yellow-300"
                   )}
                 >
                   {transaction.status}
                 </Badge>
-                <span>on {format(new Date(transaction.date), 'PPP')}</span>
+                <span>on {format(new Date(transaction.date), "PPP")}</span>
               </div>
             </CardHeader>
           </Card>
@@ -95,7 +80,7 @@ export default function TransactionDetail({
                 <li className="mb-6 ms-4">
                   <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                   <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                    {format(new Date(transaction.date), 'PPpp')}
+                    {format(new Date(transaction.date), "PPpp")}
                   </time>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Transaction {transaction.status}
@@ -103,8 +88,13 @@ export default function TransactionDetail({
                 </li>
                 <li className="mb-6 ms-4">
                   <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                   <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                    {format(new Date(new Date(transaction.date).getTime() - 1000*60*2), 'PPpp')}
+                  <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+                    {format(
+                      new Date(
+                        new Date(transaction.date).getTime() - 1000 * 60 * 2
+                      ),
+                      "PPpp"
+                    )}
                   </time>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Processing
@@ -113,7 +103,12 @@ export default function TransactionDetail({
                 <li className="ms-4">
                   <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                   <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                     {format(new Date(new Date(transaction.date).getTime() - 1000*60*5), 'PPpp')}
+                    {format(
+                      new Date(
+                        new Date(transaction.date).getTime() - 1000 * 60 * 5
+                      ),
+                      "PPpp"
+                    )}
                   </time>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Transaction Initiated
@@ -146,7 +141,9 @@ export default function TransactionDetail({
             <CardContent className="space-y-4 text-sm">
               <div className="flex items-center gap-3">
                 <Avatar className="h-8 w-8">
-                  {businessImage && <AvatarImage src={businessImage.imageUrl} />}
+                  {businessImage && (
+                    <AvatarImage src={businessImage.imageUrl} />
+                  )}
                   <AvatarFallback>{business.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <span className="font-semibold">{business.name}</span>
@@ -157,7 +154,7 @@ export default function TransactionDetail({
               </div>
             </CardContent>
           </Card>
-           <Card>
+          <Card>
             <CardHeader>
               <CardTitle>Payment Details</CardTitle>
             </CardHeader>
@@ -168,16 +165,23 @@ export default function TransactionDetail({
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Amount</span>
-                <span className='font-medium'>{transaction.currency} {transaction.amount.toLocaleString()}</span>
+                <span className="font-medium">
+                  {transaction.currency} {transaction.amount.toLocaleString()}
+                </span>
               </div>
-               <div className="flex justify-between">
+              <div className="flex justify-between">
                 <span className="text-muted-foreground">Fee</span>
-                <span className='font-medium'>{transaction.currency} {transaction.fee.toLocaleString()}</span>
+                <span className="font-medium">
+                  {transaction.currency} {transaction.fee.toLocaleString()}
+                </span>
               </div>
-              <Separator/>
+              <Separator />
               <div className="flex justify-between font-bold">
                 <span className="text-muted-foreground">Net Payout</span>
-                <span>{transaction.currency} {(transaction.amount - transaction.fee).toLocaleString()}</span>
+                <span>
+                  {transaction.currency}{" "}
+                  {(transaction.amount - transaction.fee).toLocaleString()}
+                </span>
               </div>
             </CardContent>
           </Card>

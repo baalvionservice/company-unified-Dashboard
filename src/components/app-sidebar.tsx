@@ -1,16 +1,11 @@
-
-'use client';
+"use client";
 
 import * as React from "react";
-import {
-  Briefcase,
-  ChevronDown,
-  LogOut,
-  PanelLeft,
-} from 'lucide-react';
+import { Briefcase, ChevronDown, LogOut, PanelLeft } from "lucide-react";
 
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -20,8 +15,8 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   useSidebar,
-} from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,17 +24,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
-import businessesData from '@/lib/data/businesses.json';
-import users from '@/lib/data/users.json';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import type { Business } from '@/lib/types';
-import { useIsMobile } from '@/hooks/use-mobile';
-import BottomNav from './bottom-nav';
-import { navItems } from '@/lib/nav-config';
+import businessesData from "@/lib/data/businesses";
+import users from "@/lib/data/users.json";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+import type { Business } from "@/lib/types";
+import { useIsMobile } from "@/hooks/use-mobile";
+import BottomNav from "./bottom-nav";
+import { navItems } from "@/lib/nav-config";
 
 const allBusinesses: Business[] = businessesData;
 
@@ -59,12 +54,12 @@ const BaalvionLogo = () => (
   </svg>
 );
 
-export function AppSidebar() {
+function AppSidebarContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
   const { toggleSidebar } = useSidebar();
-  const role = searchParams.get('role');
+  const role = searchParams.get("role");
   const currentUser = users[0];
   const userImage = PlaceHolderImages.find(
     (img) => img.id === currentUser.imageId
@@ -72,7 +67,10 @@ export function AppSidebar() {
   const [isDemoMode, setIsDemoMode] = React.useState(false);
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('baalvion_demo_mode') === 'true') {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("baalvion_demo_mode") === "true"
+    ) {
       setIsDemoMode(true);
     }
   }, []);
@@ -81,16 +79,18 @@ export function AppSidebar() {
 
   if (isDemoMode) {
     businesses = allBusinesses;
-  } else if (role === 'INVESTOR') {
-    const investorBusinessIds = ['biz_1', 'biz_3', 'biz_5'];
-    businesses = allBusinesses.filter((b) => investorBusinessIds.includes(b.id));
-  } else if (role === 'CO_FOUNDER') {
-    const coFounderBusinessIds = ['biz_1', 'biz_4'];
+  } else if (role === "INVESTOR") {
+    const investorBusinessIds = ["biz_1", "biz_3", "biz_5"];
+    businesses = allBusinesses.filter((b) =>
+      investorBusinessIds.includes(b.id)
+    );
+  } else if (role === "CO_FOUNDER") {
+    const coFounderBusinessIds = ["biz_1", "biz_4"];
     businesses = allBusinesses.filter((b) =>
       coFounderBusinessIds.includes(b.id)
     );
-  } else if (role === 'EMPLOYEE') {
-    const employeeBusinessId = 'biz_5';
+  } else if (role === "EMPLOYEE") {
+    const employeeBusinessId = "biz_5";
     businesses = allBusinesses.filter((b) => b.id === employeeBusinessId);
   } else {
     businesses = allBusinesses;
@@ -155,11 +155,18 @@ export function AppSidebar() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link href={{ pathname: item.href, query: { role: role || undefined } }} passHref>
+              <Link
+                href={{
+                  pathname: item.href,
+                  query: { role: role || undefined },
+                }}
+                passHref
+              >
                 <SidebarMenuButton
                   isActive={
                     pathname === item.href ||
-                    (item.href !== '/dashboard' && pathname.startsWith(item.href))
+                    (item.href !== "/dashboard" &&
+                      pathname.startsWith(item.href))
                   }
                   tooltip={item.label}
                 >
@@ -191,7 +198,7 @@ export function AppSidebar() {
                   variant="outline"
                   className="h-5 border-sidebar-border bg-sidebar-accent text-xs capitalize text-sidebar-accent-foreground"
                 >
-                  {currentUser.role.toLowerCase().replace('_', '-')}
+                  {currentUser.role.toLowerCase().replace("_", "-")}
                 </Badge>
               </div>
             </Button>
@@ -205,8 +212,13 @@ export function AppSidebar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="ghost" size="icon" className="w-full justify-center text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent" onClick={toggleSidebar}>
-            <PanelLeft />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="w-full justify-center text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+          onClick={toggleSidebar}
+        >
+          <PanelLeft />
         </Button>
         <div className="p-2 text-center text-xs text-sidebar-foreground/50">
           <BaalvionLogo />
@@ -221,5 +233,49 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
+  );
+}
+function AppSidebarFallback() {
+  return (
+    <Sidebar className="no-print">
+      <SidebarHeader className="h-auto p-0">
+        <div className="flex h-12 w-full items-center justify-between p-2">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-md bg-muted animate-pulse" />
+            <div className="space-y-1">
+              <div className="h-4 w-24 rounded bg-muted animate-pulse" />
+              <div className="h-3 w-16 rounded bg-muted animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </SidebarHeader>
+      <SidebarContent className="flex-grow p-2">
+        <div className="space-y-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-2 p-2">
+              <div className="h-4 w-4 rounded bg-muted animate-pulse" />
+              <div className="h-4 w-20 rounded bg-muted animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </SidebarContent>
+      <SidebarFooter className="p-2">
+        <div className="flex items-center gap-2 p-2">
+          <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+          <div className="space-y-1">
+            <div className="h-4 w-24 rounded bg-muted animate-pulse" />
+            <div className="h-3 w-16 rounded bg-muted animate-pulse" />
+          </div>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
+
+export function AppSidebar() {
+  return (
+    <Suspense fallback={<AppSidebarFallback />}>
+      <AppSidebarContent />
+    </Suspense>
   );
 }
