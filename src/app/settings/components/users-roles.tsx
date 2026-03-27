@@ -77,7 +77,7 @@ export default function UsersRoles() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">
+                  <TableHead className="w-8 sm:w-[50px]">
                     <Checkbox
                       onCheckedChange={handleSelectAll}
                       checked={

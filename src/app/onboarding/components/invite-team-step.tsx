@@ -74,7 +74,7 @@ export default function InviteTeamStep({
                 }
               />
             </div>
-            <div className="w-[150px] space-y-1">
+            <div className="w-full sm:w-[150px] space-y-1">
               <Label htmlFor={`role-${index}`} className="text-xs">
                 Role
               </Label>

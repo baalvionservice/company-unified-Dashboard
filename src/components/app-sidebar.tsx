@@ -4,7 +4,7 @@ import * as React from "react";
 import { Briefcase, ChevronDown, LogOut, PanelLeft } from "lucide-react";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import {
   Sidebar,
@@ -29,9 +29,9 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 
 import businessesData from "@/lib/data/businesses";
-import users from "@/lib/data/users.json";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import type { Business } from "@/lib/types";
+import { getCurrentUser } from "@/lib/auth";
+import type { Business, User } from "@/lib/types";
 import { useIsMobile } from "@/hooks/use-mobile";
 import BottomNav from "./bottom-nav";
 import { navItems } from "@/lib/nav-config";
@@ -56,17 +56,17 @@ const BaalvionLogo = () => (
 
 function AppSidebarContent() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const isMobile = useIsMobile();
   const { toggleSidebar } = useSidebar();
-  const role = searchParams.get("role");
-  const currentUser = users[0];
-  const userImage = PlaceHolderImages.find(
-    (img) => img.id === currentUser.imageId
-  );
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const [mounted, setMounted] = React.useState(false);
   const [isDemoMode, setIsDemoMode] = React.useState(false);
 
   React.useEffect(() => {
+    setMounted(true);
+    const user = getCurrentUser();
+    setCurrentUser(user);
+
     if (
       typeof window !== "undefined" &&
       localStorage.getItem("baalvion_demo_mode") === "true"
@@ -75,26 +75,16 @@ function AppSidebarContent() {
     }
   }, []);
 
-  let businesses: Business[];
-
-  if (isDemoMode) {
-    businesses = allBusinesses;
-  } else if (role === "INVESTOR") {
-    const investorBusinessIds = ["biz_1", "biz_3", "biz_5"];
-    businesses = allBusinesses.filter((b) =>
-      investorBusinessIds.includes(b.id)
-    );
-  } else if (role === "CO_FOUNDER") {
-    const coFounderBusinessIds = ["biz_1", "biz_4"];
-    businesses = allBusinesses.filter((b) =>
-      coFounderBusinessIds.includes(b.id)
-    );
-  } else if (role === "EMPLOYEE") {
-    const employeeBusinessId = "biz_5";
-    businesses = allBusinesses.filter((b) => b.id === employeeBusinessId);
-  } else {
-    businesses = allBusinesses;
+  if (!mounted || !currentUser) {
+    return <AppSidebarFallback />;
   }
+
+  const userImage = PlaceHolderImages.find(
+    (img) => img.id === currentUser.imageId
+  );
+
+  // Show all businesses - role-based filtering removed
+  const businesses: Business[] = allBusinesses;
 
   if (isMobile) {
     return <BottomNav />;
@@ -155,13 +145,7 @@ function AppSidebarContent() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link
-                href={{
-                  pathname: item.href,
-                  query: { role: role || undefined },
-                }}
-                passHref
-              >
+              <Link href={item.href} passHref>
                 <SidebarMenuButton
                   isActive={
                     pathname === item.href ||

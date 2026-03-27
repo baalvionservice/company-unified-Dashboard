@@ -65,7 +65,7 @@ export default function RevenueForecastChart() {
           <CardDescription>Next 6 months projection (USD M)</CardDescription>
         </div>
         <Select defaultValue="all">
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Select business" />
           </SelectTrigger>
           <SelectContent>

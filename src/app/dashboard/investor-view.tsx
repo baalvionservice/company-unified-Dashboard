@@ -6,6 +6,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { DollarSign, Briefcase, TrendingUp, PieChart } from "lucide-react";
+import { RoleWelcomeBanner } from "@/components/role-welcome-banner";
 import RoiChart from "@/components/charts/roi-chart";
 import EquityPieChart from "@/components/charts/equity-pie-chart";
 import businesses from "@/lib/data/businesses";
@@ -20,7 +21,8 @@ export default function InvestorView() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 min-w-0">
+      <RoleWelcomeBanner />
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">
           Investor Dashboard
@@ -28,7 +30,7 @@ export default function InvestorView() {
         <p className="text-muted-foreground">Your portfolio at a glance.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -92,7 +94,7 @@ export default function InvestorView() {
         <h2 className="mb-4 text-2xl font-bold tracking-tight">
           My Businesses
         </h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {myBusinesses.map((biz) => {
             const image = PlaceHolderImages.find(
               (img) => img.id === biz.imageId

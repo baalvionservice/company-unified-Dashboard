@@ -127,7 +127,7 @@ export default function TaskBoard() {
             value={filters.business}
             onValueChange={handleFilterChange("business")}
           >
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full sm:w-[150px]">
               <SelectValue placeholder="Business" />
             </SelectTrigger>
             <SelectContent>
@@ -143,7 +143,7 @@ export default function TaskBoard() {
             value={filters.assignee}
             onValueChange={handleFilterChange("assignee")}
           >
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full sm:w-[150px]">
               <SelectValue placeholder="Assignee" />
             </SelectTrigger>
             <SelectContent>
@@ -159,7 +159,7 @@ export default function TaskBoard() {
             value={filters.priority}
             onValueChange={handleFilterChange("priority")}
           >
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-full sm:w-[120px]">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
@@ -173,7 +173,7 @@ export default function TaskBoard() {
             value={filters.department}
             onValueChange={handleFilterChange("department")}
           >
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full sm:w-[150px]">
               <SelectValue placeholder="Department" />
             </SelectTrigger>
             <SelectContent>

@@ -116,7 +116,7 @@ export default function NotificationsPage() {
               value={activeTab}
               onValueChange={(v) => setActiveTab(v as FilterType)}
             >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
                 {tabs.map((tab) => (
                   <TabsTrigger key={tab} value={tab}>
                     {tab}{" "}

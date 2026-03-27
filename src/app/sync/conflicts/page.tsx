@@ -81,7 +81,7 @@ export default function ConflictResolutionPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[50px]">#</TableHead>
+                  <TableHead className="w-8 sm:w-[50px]">#</TableHead>
                   <TableHead>Business</TableHead>
                   <TableHead>Field</TableHead>
                   <TableHead>Offline Value</TableHead>

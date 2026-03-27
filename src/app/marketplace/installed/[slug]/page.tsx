@@ -137,7 +137,10 @@ export default function AppSettingsPage({
           <div className="space-y-2">
             <Label htmlFor="sync-frequency">Sync Frequency</Label>
             <Select defaultValue="daily">
-              <SelectTrigger id="sync-frequency" className="w-[240px]">
+              <SelectTrigger
+                id="sync-frequency"
+                className="w-full sm:w-[240px]"
+              >
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>

@@ -248,7 +248,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <PanelLeft  />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

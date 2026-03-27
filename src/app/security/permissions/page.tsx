@@ -101,7 +101,9 @@ export default function PermissionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[250px]">Permission</TableHead>
+                  <TableHead className="w-32 sm:w-[250px]">
+                    Permission
+                  </TableHead>
                   {roles.map((role) => (
                     <TableHead key={role} className="text-center">
                       {role}
@@ -147,7 +149,9 @@ export default function PermissionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[250px]">Permission</TableHead>
+                  <TableHead className="w-32 sm:w-[250px]">
+                    Permission
+                  </TableHead>
                   {roles.map((role) => (
                     <TableHead key={role} className="text-center">
                       {role}

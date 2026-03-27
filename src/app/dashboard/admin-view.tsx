@@ -27,6 +27,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { RoleWelcomeBanner } from "@/components/role-welcome-banner";
 import businessesData from "@/lib/data/businesses";
 import fxRatesData from "@/lib/data/fx-rates.json";
 import type { Business, FxRate, BusinessStatus } from "@/lib/types";
@@ -274,6 +275,7 @@ export default function AdminView() {
   return (
     <>
       <Confetti show={showConfetti} />
+      <RoleWelcomeBanner />
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
@@ -286,7 +288,7 @@ export default function AdminView() {
         {isNewUser && <SetupChecklist />}
         <div
           id="dashboard-stats"
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+          className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         >
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -371,77 +373,93 @@ export default function AdminView() {
                   A summary of all your managed businesses.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Business</TableHead>
-                      <TableHead>Country</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Revenue</TableHead>
-                      <TableHead className="text-right">Profit</TableHead>
-                      <TableHead className="text-right">Employees</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {businesses.map((biz) => {
-                      const image = PlaceHolderImages.find(
-                        (img) => img.id === biz.imageId
-                      );
-                      return (
-                        <TableRow key={biz.id}>
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              <Avatar className="h-8 w-8">
-                                {image && (
-                                  <AvatarImage
-                                    src={image.imageUrl}
-                                    alt={biz.name}
-                                    data-ai-hint={image.imageHint}
-                                  />
+              <CardContent className="overflow-x-auto">
+                <div className="min-w-[600px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[200px]">
+                          Business
+                        </TableHead>
+                        <TableHead className="min-w-[100px]">Country</TableHead>
+                        <TableHead className="min-w-[80px]">Status</TableHead>
+                        <TableHead className="text-right min-w-[100px]">
+                          Revenue
+                        </TableHead>
+                        <TableHead className="text-right min-w-[100px]">
+                          Profit
+                        </TableHead>
+                        <TableHead className="text-right min-w-[100px]">
+                          Employees
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {businesses.map((biz) => {
+                        const image = PlaceHolderImages.find(
+                          (img) => img.id === biz.imageId
+                        );
+                        return (
+                          <TableRow key={biz.id}>
+                            <TableCell className="min-w-[200px]">
+                              <div className="flex items-center gap-3">
+                                <Avatar className="h-8 w-8 flex-shrink-0">
+                                  {image && (
+                                    <AvatarImage
+                                      src={image.imageUrl}
+                                      alt={biz.name}
+                                      data-ai-hint={image.imageHint}
+                                    />
+                                  )}
+                                  <AvatarFallback>
+                                    {biz.name.charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="font-medium truncate">
+                                  {biz.name}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="min-w-[100px]">
+                              {biz.country}
+                            </TableCell>
+                            <TableCell className="min-w-[80px]">
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "capitalize",
+                                  statusColors[biz.status]
                                 )}
-                                <AvatarFallback>
-                                  {biz.name.charAt(0)}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className="font-medium">{biz.name}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>{biz.country}</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant="outline"
-                              className={cn(
-                                "capitalize",
-                                statusColors[biz.status]
-                              )}
+                              >
+                                {biz.status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell
+                              className="text-right min-w-[100px]"
+                              id="currency-display"
                             >
-                              {biz.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell
-                            className="text-right"
-                            id="currency-display"
-                          >
-                            {biz.currency}{" "}
-                            {(biz.currentMetrics.revenue / 1_000_000).toFixed(
-                              2
-                            )}
-                            M
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {biz.currency}{" "}
-                            {(biz.currentMetrics.profit / 1_000_000).toFixed(2)}
-                            M
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {biz.currentMetrics.employees.toLocaleString()}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                              {biz.currency}{" "}
+                              {(biz.currentMetrics.revenue / 1_000_000).toFixed(
+                                2
+                              )}
+                              M
+                            </TableCell>
+                            <TableCell className="text-right min-w-[100px]">
+                              {biz.currency}{" "}
+                              {(biz.currentMetrics.profit / 1_000_000).toFixed(
+                                2
+                              )}
+                              M
+                            </TableCell>
+                            <TableCell className="text-right min-w-[100px]">
+                              {biz.currentMetrics.employees.toLocaleString()}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </div>

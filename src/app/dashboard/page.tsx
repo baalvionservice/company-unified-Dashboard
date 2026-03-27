@@ -1,18 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { ProtectedRoute } from "@/components/protected-route";
+import { getUserRole } from "@/lib/auth";
 import type { Role } from "@/lib/types";
 import AdminView from "./admin-view";
 import InvestorView from "./investor-view";
 import CoFounderView from "./co-founder-view";
 import EmployeeView from "./employee-view";
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ role?: Role }>;
-}) {
-  const params = await searchParams;
-  const role = params?.role;
+function DashboardContent() {
+  const [currentRole, setCurrentRole] = useState<Role>("ADMIN");
+  const [mounted, setMounted] = useState(false);
 
-  switch (role) {
+  useEffect(() => {
+    setMounted(true);
+    const userRole = getUserRole();
+    setCurrentRole(userRole || "ADMIN");
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  switch (currentRole) {
     case "INVESTOR":
       return <InvestorView />;
     case "CO_FOUNDER":
@@ -22,4 +37,12 @@ export default async function DashboardPage({
     default:
       return <AdminView />;
   }
+}
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
+  );
 }

@@ -83,7 +83,7 @@ export default function SyncPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-muted-foreground">Today's Revenue</p>
                 <p className="text-2xl font-bold">
@@ -141,7 +141,7 @@ export default function SyncPage() {
             <CardDescription>In-store and POS transactions.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-muted-foreground">Today's Revenue</p>
                 <p className="text-2xl font-bold">

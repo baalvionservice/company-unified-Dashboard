@@ -28,7 +28,7 @@ export default function TrialBanner() {
       <Target className="h-5 w-5" />
       <div className="flex-1">
         <AlertTitle className="font-bold">You're on a 14-day free trial.</AlertTitle>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-start gap-2">
             <Progress value={progress} className="w-32 h-1.5 [&>div]:bg-orange-500" />
             <AlertDescription className="text-xs">
                  {trialData.daysRemaining} days remaining.

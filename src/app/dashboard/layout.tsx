@@ -89,9 +89,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <div className="flex flex-col">
+          <div className="">
             <HeaderWrapper />
-            <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-x-hidden">
+              {children}
+            </main>
           </div>
         </SidebarInset>
       </SidebarProvider>

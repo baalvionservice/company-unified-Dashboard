@@ -8,6 +8,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Star, Target } from "lucide-react";
+import { RoleWelcomeBanner } from "@/components/role-welcome-banner";
 import users from "@/lib/data/users.json";
 import businesses from "@/lib/data/businesses";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -50,7 +51,8 @@ export default function EmployeeView() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 min-w-0">
+      <RoleWelcomeBanner />
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">
           Employee Dashboard
@@ -59,7 +61,7 @@ export default function EmployeeView() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-1">
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-1 min-w-0">
           <Card>
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
@@ -102,8 +104,8 @@ export default function EmployeeView() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
-          <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-2 min-w-0">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">

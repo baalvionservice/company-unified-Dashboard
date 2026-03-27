@@ -167,12 +167,12 @@ export function Header() {
       <RateLimitBanner />
       <OfflineBanner />
       <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
-        <SidebarTrigger className="sm:hidden" />
-        <div className="flex w-full items-center gap-4">
+        {/* <SidebarTrigger className="hidden sm:hidden" /> */}
+        <div className="flex w-full justify-between items-center gap-2 md:gap-4">
           <Select value={selectedBusiness} onValueChange={handleBusinessChange}>
-            <SelectTrigger className="w-full md:w-[180px]">
+            <SelectTrigger className="w-full max-w-[150px] min-w-44  sm:max-w-[180px] md:w-[280px]">
               <div className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4" />
+                <Briefcase className="h-4 w-4 shrink-0" />
                 <SelectValue placeholder="Select Business" />
               </div>
             </SelectTrigger>
@@ -194,9 +194,10 @@ export function Header() {
                     className="w-full justify-start text-muted-foreground md:w-[200px] lg:w-[320px]"
                     onClick={openSearch}
                   >
-                    <Search className="h-4 w-4 mr-2" />
-                    <span>Search...</span>
-                    <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                    <Search className="h-4 w-4 mr-2 shrink-0" />
+                    <span className="hidden sm:inline">Search...</span>
+                    <span className="sm:hidden">Search</span>
+                    <kbd className="ml-auto pointer-events-none hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                       <span className="text-xs">⌘</span>K
                     </kbd>
                   </Button>
@@ -231,10 +232,13 @@ export function Header() {
                     <p>We'll notify you here when something needs attention</p>
                   </TooltipContent>
                 </Tooltip>
-                <DropdownMenuContent align="end" className="w-96">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-80 sm:w-96 max-w-[calc(100vw-2rem)]"
+                >
                   <DropdownMenuLabel>Notifications</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 max-h-80 overflow-y-auto">
                     {latestNotifications.map((notification) => {
                       const Icon =
                         notificationIcons[
@@ -248,17 +252,17 @@ export function Header() {
                           >
                             <Icon
                               className={cn(
-                                "mt-1 h-4 w-4",
+                                "mt-1 h-4 w-4 shrink-0",
                                 notificationColors[
                                   notification.type as NotificationType
                                 ]
                               )}
                             />
-                            <div className="flex-1 space-y-1">
-                              <p className="text-sm font-medium">
+                            <div className="flex-1 space-y-1 min-w-0">
+                              <p className="text-sm font-medium truncate">
                                 {notification.title}
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-xs text-muted-foreground line-clamp-2">
                                 {notification.description}
                               </p>
                               <p className="text-xs text-muted-foreground">
@@ -269,7 +273,7 @@ export function Header() {
                               </p>
                             </div>
                             {!notification.isRead && (
-                              <div className="mt-1 h-2 w-2 rounded-full bg-blue-500"></div>
+                              <div className="mt-1 h-2 w-2 rounded-full bg-blue-500 shrink-0"></div>
                             )}
                           </Link>
                         </DropdownMenuItem>
