@@ -21,11 +21,14 @@ export default function BusinessesPage() {
     return (
       <div className="space-y-8">
         <h1 className="text-3xl font-bold tracking-tight">Businesses</h1>
+        <div className="w-screen ">
+
         <BusinessSelector
           businesses={businessesData as Business[]}
           selectedBusiness={selectedBusiness}
           onSelectBusiness={setSelectedBusiness}
-        />
+          />
+          </div>
         <BusinessDetails business={selectedBusiness} />
       </div>
     );

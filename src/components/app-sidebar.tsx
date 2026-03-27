@@ -15,6 +15,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   useSidebar,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -100,6 +101,7 @@ function AppSidebarContent() {
               className="flex h-auto w-full items-center justify-between p-2 hover:bg-sidebar-accent"
             >
               <div className="flex items-center gap-2">
+                {/* <SidebarTrigger className="h-8 w-8" /> */}
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
                   <Briefcase className="h-5 w-5 text-primary-foreground" />
                 </div>
@@ -114,6 +116,7 @@ function AppSidebarContent() {
               </div>
               <ChevronDown className="h-4 w-4 text-sidebar-foreground/70" />
             </Button>
+           
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-64"
@@ -139,6 +142,7 @@ function AppSidebarContent() {
             })}
           </DropdownMenuContent>
         </DropdownMenu>
+       
       </SidebarHeader>
 
       <SidebarContent className="flex-grow p-2">
@@ -196,25 +200,8 @@ function AppSidebarContent() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-full justify-center text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
-          onClick={toggleSidebar}
-        >
-          <PanelLeft />
-        </Button>
-        <div className="p-2 text-center text-xs text-sidebar-foreground/50">
-          <BaalvionLogo />
-          <p className="mt-2">v2.1.0</p>
-          <p className="flex items-center justify-center gap-1 mt-1">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            All systems operational
-          </p>
-        </div>
+       
+       
       </SidebarFooter>
     </Sidebar>
   );

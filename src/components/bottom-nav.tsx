@@ -35,7 +35,7 @@ export default function BottomNav() {
         {mainNav.map(item => {
           const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
           return (
-            <Link key={item.href} href={{ pathname: item.href, query: { role: role || undefined } }} className={cn("flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium", isActive ? 'text-primary' : 'text-muted-foreground')}>
+            <Link key={item.href} href={{ pathname: item.href}} className={cn("flex flex-col items-center gap-1 rounded-md p-2 text-xs font-medium", isActive ? 'text-primary' : 'text-muted-foreground')}>
               <item.icon className="h-5 w-5" />
               <span>{item.label}</span>
             </Link>
