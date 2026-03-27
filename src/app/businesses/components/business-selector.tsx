@@ -19,7 +19,7 @@ export default function BusinessSelector({ businesses, selectedBusiness, onSelec
       align: "start",
       dragFree: true,
     }}>
-      <CarouselContent className="-ml-2">
+      <CarouselContent className="pr-12">
         {businesses.map((biz) => {
           const image = PlaceHolderImages.find(i => i.id === biz.imageId);
           return (

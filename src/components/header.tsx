@@ -167,8 +167,9 @@ export function Header() {
       <RateLimitBanner />
       <OfflineBanner />
       <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
-        {/* <SidebarTrigger className="hidden sm:hidden" /> */}
+        <SidebarTrigger className="hidden sm:flex" />
         <div className="flex w-full justify-between items-center gap-2 md:gap-4">
+          
           <Select value={selectedBusiness} onValueChange={handleBusinessChange}>
             <SelectTrigger className="w-full max-w-[150px] min-w-44  sm:max-w-[180px] md:w-[280px]">
               <div className="flex items-center gap-2">
