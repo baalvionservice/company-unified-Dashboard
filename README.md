@@ -1,4 +1,8 @@
 <div align="center">
+  <img src=".github/preview.png" alt="Baalvion Unified Dashboard" width="100%" />
+</div>
+
+<div align="center">
 
 # Baalvion Unified Dashboard
 
